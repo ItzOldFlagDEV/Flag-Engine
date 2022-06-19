@@ -17,6 +17,8 @@ import lime.app.Application;
 
 class OptionsMenu extends MusicBeatState
 {
+
+
 	var selector:FlxText;
 	var curSelected:Int = 0;
 
@@ -40,7 +42,7 @@ class OptionsMenu extends MusicBeatState
 			new FPSOption("Toggle the FPS Counter."),
 			new ToogleGUI("Toggle GUI."),
 			//new QuantOption("Stepmania style note colours."),
-			new Strums("Toggle if opponent strums glow on note hits.")
+			new Strums("Toggle if opponent strums glow on note hits."),
 		]),
 		new OptionCatagory("Optimization", [
 			new DadToogle("Hiding Dad."),

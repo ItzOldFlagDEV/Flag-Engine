@@ -1249,7 +1249,10 @@ class PlayState extends MusicBeatState
 			switch (curStage)
 			{
 				case 'school' | 'schoolEvil':
-					babyArrow.loadGraphic(Paths.image('weeb/pixelUI/arrows-pixels'), true, 17, 17);
+				if (FlxG.save.data.noteskin)
+				{
+					babyArrow.loadGraphic(Paths.image('notes/arrows-pixels'), true, 17, 17);
+				}
 					babyArrow.animation.add('green', [6]);
 					babyArrow.animation.add('red', [7]);
 					babyArrow.animation.add('blue', [5]);
@@ -2607,16 +2610,16 @@ class PlayState extends MusicBeatState
 					var sploosh:FlxSprite = new FlxSprite(note.x, playerStrums.members[note.noteData].y);
 					if (!curStage.startsWith('school'))
 					{
-						var tex:flixel.graphics.frames.FlxAtlasFrames = Paths.getSparrowAtlas('splashes');
+						var tex:flixel.graphics.frames.FlxAtlasFrames = Paths.getSparrowAtlas('noteSplashes');
 						sploosh.frames = tex;
-						sploosh.animation.addByPrefix('splash 0 0', 'note impact 1 purple', 24, false);
-						sploosh.animation.addByPrefix('splash 0 1', 'note impact 1  blue', 24, false);
-						sploosh.animation.addByPrefix('splash 0 2', 'note impact 1 green', 24, false);
-						sploosh.animation.addByPrefix('splash 0 3', 'note impact 1 red', 24, false);
-						sploosh.animation.addByPrefix('splash 1 0', 'note impact 2 purple', 24, false);
-						sploosh.animation.addByPrefix('splash 1 1', 'note impact 2 blue', 24, false);
-						sploosh.animation.addByPrefix('splash 1 2', 'note impact 2 green', 24, false);
-						sploosh.animation.addByPrefix('splash 1 3', 'note impact 2 red', 24, false);
+						sploosh.animation.addByPrefix('splash 0 0', 'note splash purple 1', 24, false);
+						sploosh.animation.addByPrefix('splash 0 1', 'note splash blue 1', 24, false);
+						sploosh.animation.addByPrefix('splash 0 2', 'note splash green 1', 24, false);
+						sploosh.animation.addByPrefix('splash 0 3', 'note splash red 1', 24, false);
+						sploosh.animation.addByPrefix('splash 1 0', 'note splash purple 2', 24, false);
+						sploosh.animation.addByPrefix('splash 1 1', 'note splash blue 2', 24, false);
+						sploosh.animation.addByPrefix('splash 1 2', 'note splash green 2', 24, false);
+						sploosh.animation.addByPrefix('splash 1 3', 'note splash red 2', 24, false);
 						sploosh.antialiasing = true;
 						if (shouldSplash == true && !note.isSustainNote)
 						{
@@ -2624,8 +2627,8 @@ class PlayState extends MusicBeatState
 						sploosh.cameras = [camHUD];
 						sploosh.animation.play('splash ' + FlxG.random.int(0, 1) + " " + note.noteData);
 						sploosh.alpha = 1;
-						sploosh.offset.x += 90;
-						sploosh.offset.y += 80;
+						sploosh.offset.x -= -120;
+						sploosh.offset.y += 110;
 						sploosh.animation.finishCallback = function(name) sploosh.kill();
 						if (FlxG.save.data.notesplash)
 							{

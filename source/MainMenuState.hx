@@ -33,7 +33,7 @@ class MainMenuState extends MusicBeatState
 	var GhosTtapingOption:Bool = true;
 
 	public static var gameVer:String = "0.2.7.1";
-	public static var FlagEngine:String = "1.0.1";
+	public static var FlagEngine:String = "1.0.2";
 
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;

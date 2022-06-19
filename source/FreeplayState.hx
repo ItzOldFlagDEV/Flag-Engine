@@ -16,6 +16,7 @@ using StringTools;
 
 class FreeplayState extends MusicBeatState
 {
+
 	var songs:Array<SongMetadata> = [];
 
 	var selector:FlxText;
@@ -194,9 +195,10 @@ class FreeplayState extends MusicBeatState
 		if(shift)
 		{
 			FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0);
-			vocals = new FlxSound();
-			vocals = new FlxSound().loadEmbedded(Paths.voices(songs[curSelected].songName));
-			vocals.play();
+			//This works but with bugs
+			//vocals = new FlxSound();
+			//vocals = new FlxSound().loadEmbedded(Paths.voices(songs[curSelected].songName));
+			//vocals.play();
 			Application.current.window.title = 'Flag Engine ~ Freeplay Menu (Listening to ' + songs[curSelected].songName +')';
 		}
 
