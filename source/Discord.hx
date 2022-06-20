@@ -11,8 +11,7 @@ class DiscordClient
 	{
 		trace("Discord Client starting...");
 		DiscordRpc.start({
-			clientID: "985585871245938709", // change this to what ever the fuck you want lol
-			onReady: onReady,
+			clientID: "985585871245938709",
 			onError: onError,
 			onDisconnected: onDisconnected
 		});
@@ -22,7 +21,6 @@ class DiscordClient
 		{
 			DiscordRpc.process();
 			sleep(2);
-			//trace("Discord Client Update");
 		}
 
 		DiscordRpc.shutdown();
@@ -32,6 +30,7 @@ class DiscordClient
 	{
 		DiscordRpc.presence({
 			details: "Flag Engine",
+			state: null,
 			largeImageKey: 'icon',
 			largeImageText: "Friday Night Funkin': Flag Engine"
 		});
@@ -67,6 +66,8 @@ class DiscordClient
 
 		DiscordRpc.presence({
 			largeImageKey: 'icon',
+			state: state,
+			details: details,
 			largeImageText: "Friday Night Funkin': Flag Engine",
 			smallImageKey : smallImageKey,
 		});

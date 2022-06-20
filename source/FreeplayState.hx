@@ -12,6 +12,10 @@ import flixel.system.FlxSound;
 import lime.utils.Assets;
 import lime.app.Application;
 
+#if desktop
+import Discord.DiscordClient;
+#end
+
 using StringTools;
 
 class FreeplayState extends MusicBeatState
@@ -36,6 +40,7 @@ class FreeplayState extends MusicBeatState
 
 	override function create()
 	{
+
 		Application.current.window.title = 'Flag Engine ~ Freeplay Menu';
 		var initSonglist = CoolUtil.coolTextFile(Paths.txt('freeplaySonglist'));
 
@@ -147,6 +152,11 @@ class FreeplayState extends MusicBeatState
 		 text.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER);
 		 text.scrollFactor.set();
 		 add(text);
+
+		#if desktop
+		DiscordClient.changePresence("In the Freeplay menu", null);
+		#end
+
 		super.create();
 	}
 
@@ -200,6 +210,9 @@ class FreeplayState extends MusicBeatState
 			//vocals = new FlxSound().loadEmbedded(Paths.voices(songs[curSelected].songName));
 			//vocals.play();
 			Application.current.window.title = 'Flag Engine ~ Freeplay Menu (Listening to ' + songs[curSelected].songName +')';
+			#if desktop
+			DiscordClient.changePresence("In the Freeplay menu " + "(Listening to " + songs[curSelected].songName + ")", null);
+			#end
 		}
 
 		if (upP)
@@ -311,6 +324,8 @@ class FreeplayState extends MusicBeatState
 			if (item.targetY == 0)
 			{
 				item.alpha = 1;
+				item.x += 60;
+				item.y += 10;
 				// item.setGraphicSize(Std.int(item.width));
 			}
 		}

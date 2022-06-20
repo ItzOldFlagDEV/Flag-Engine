@@ -526,3 +526,24 @@ class Strums extends Option
 		return "Glow Opponent Strums " + (!FlxG.save.data.glowStrums ? "on" : "off");
 	}
 }
+
+class HitSounds extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+
+	public override function press():Bool
+	{
+		FlxG.save.data.hitsounds = !FlxG.save.data.hitsounds;
+		display = updateDisplay();
+		return true;
+	}
+
+	private override function updateDisplay():String
+	{
+		return "Hitsounds " + (!FlxG.save.data.hitsounds ? "off" : "on");
+	}
+}

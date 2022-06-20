@@ -37,6 +37,10 @@ import openfl.media.Sound;
 import openfl.net.FileReference;
 import openfl.utils.ByteArray;
 
+#if desktop
+import Discord.DiscordClient;
+#end
+
 using StringTools;
 
 class ChartingState extends MusicBeatState

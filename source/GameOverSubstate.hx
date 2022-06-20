@@ -9,6 +9,9 @@ import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import lime.app.Application;
 
+#if desktop
+import Discord.DiscordClient;
+#end
 
 class GameOverSubstate extends MusicBeatSubstate
 {
@@ -53,6 +56,7 @@ class GameOverSubstate extends MusicBeatSubstate
 		FlxG.camera.target = null;
 
 		bf.playAnim('firstDeath');
+
 	}
 
 	override function update(elapsed:Float)
@@ -80,16 +84,25 @@ class GameOverSubstate extends MusicBeatSubstate
 		if (bf.animation.curAnim.name == 'firstDeath' && bf.animation.curAnim.curFrame == 12)
 		{
 			FlxG.camera.follow(camFollow, LOCKON, 0.01);
+			#if desktop
+			DiscordClient.changePresence("Game Over", null);
+			#end
 		}
 
 		if (bf.animation.curAnim.name == 'firstDeath' && bf.animation.curAnim.finished)
 		{
 			FlxG.sound.playMusic(Paths.music('gameOver' + stageSuffix));
+			#if desktop
+			DiscordClient.changePresence("Game Over", null);
+			#end
 		}
 
 		if (FlxG.sound.music.playing)
 		{
 			Conductor.songPosition = FlxG.sound.music.time;
+			#if desktop
+			DiscordClient.changePresence("Game Over", null);
+			#end
 		}
 	}
 
@@ -106,6 +119,7 @@ class GameOverSubstate extends MusicBeatSubstate
 	{
 		if (!isEnding)
 		{
+
 			isEnding = true;
 			bf.playAnim('deathConfirm', true);
 			FlxG.sound.music.stop();

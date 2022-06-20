@@ -14,6 +14,10 @@ import flixel.util.FlxColor;
 import io.newgrounds.NG;
 import lime.app.Application;
 
+#if desktop
+import Discord.DiscordClient;
+#end
+
 using StringTools;
 
 class MainMenuState extends MusicBeatState
@@ -33,13 +37,17 @@ class MainMenuState extends MusicBeatState
 	var GhosTtapingOption:Bool = true;
 
 	public static var gameVer:String = "0.2.7.1";
-	public static var FlagEngine:String = "1.0.2";
+	public static var FlagEngine:String = "1.0.3 pre-release";
 
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 
 	override function create()
 	{
+		#if desktop
+		DiscordClient.changePresence("Browsing menu", null);
+		#end
+
 		Application.current.window.title = 'Flag Engine ~ Main Menu';
 		if (!FlxG.sound.music.playing)
 		{

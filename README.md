@@ -4,6 +4,7 @@ Flag Engine:
 
     -Fixed input
     -It is better and more convenient to create mods
+    -Discard Rich Presence
 
 Flag Engine has a lot of settings:
 
@@ -29,6 +30,7 @@ Other settings:
     -Toggle FPS counter
     -Toggle GUI
     -Toggle Glow opponent sturms
+    -Hitsounds
 
 Optimization settings:
 

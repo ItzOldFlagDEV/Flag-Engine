@@ -15,6 +15,10 @@ import flixel.util.FlxColor;
 import lime.utils.Assets;
 import lime.app.Application;
 
+#if desktop
+import Discord.DiscordClient;
+#end
+
 class OptionsMenu extends MusicBeatState
 {
 
@@ -43,6 +47,7 @@ class OptionsMenu extends MusicBeatState
 			new ToogleGUI("Toggle GUI."),
 			//new QuantOption("Stepmania style note colours."),
 			new Strums("Toggle if opponent strums glow on note hits."),
+			new HitSounds("Toggle hit sounds")
 		]),
 		new OptionCatagory("Optimization", [
 			new DadToogle("Hiding Dad."),
@@ -68,6 +73,10 @@ class OptionsMenu extends MusicBeatState
 
 	override function create()
 	{
+		#if desktop
+		DiscordClient.changePresence("In the Options menu", null);
+		#end
+
 		Application.current.window.title = 'Flag Engine ~ Options Menu';
 		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image("menuDesat"));
 

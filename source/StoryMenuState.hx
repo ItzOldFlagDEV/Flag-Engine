@@ -14,6 +14,10 @@ import flixel.util.FlxTimer;
 import lime.net.curl.CURLCode;
 import lime.app.Application;
 
+#if desktop
+import Discord.DiscordClient;
+#end
+
 using StringTools;
 
 class StoryMenuState extends MusicBeatState
@@ -72,6 +76,10 @@ class StoryMenuState extends MusicBeatState
 
 	override function create()
 	{
+		#if desktop
+		DiscordClient.changePresence("In the Story menu", null);
+		#end
+
 		Application.current.window.title = 'Flag Engine ~ Story Mode Menu';
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;

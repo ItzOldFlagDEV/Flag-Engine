@@ -44,6 +44,9 @@ import openfl.filters.ShaderFilter;
 #if sys
 import sys.FileSystem;
 #end
+#if desktop
+import Discord.DiscordClient;
+#end
 
 using StringTools;
 
@@ -61,6 +64,8 @@ class PlayState extends MusicBeatState
 	public static var goods:Int = 0;
 	public static var sicks:Int = 0;
 	public static var marvs:Int = 0;
+	var currentFrames:Int = 0;
+	var notesHitArray:Array<Date> = [];
 
 	public static var rep:Replay;
 	public static var loadRep:Bool = false;
@@ -776,7 +781,7 @@ class PlayState extends MusicBeatState
 		judgements.scrollFactor.set();
 		judgements.cameras = [camHUD];
 		judgements.screenCenter(Y);
-		judgements.text = 'Marvelous: ${marvs}\nSicks: ${sicks}\nGoods: ${goods}\nBads: ${bads}\nShits: ${shits}\nmisses: ${misses}';
+		judgements.text = 'Marvelous: ${marvs}\nSicks: ${sicks}\nGoods: ${goods}\nBads: ${bads}\nCombo: ${combo}\nmisses: ${misses}';
 		if (FlxG.save.data.judgements)
 		{
 			add(judgements);
@@ -805,6 +810,9 @@ class PlayState extends MusicBeatState
 		iconP2.y = healthBar.y - (iconP2.height / 2);
 		add(iconP2);
 
+		#if desktop
+		DiscordClient.changePresence("Playing " + curSong + " " + diffString, null);
+		#end
 		strumLineNotes.cameras = [camHUD];
 		notes.cameras = [camHUD];
 		healthBar.cameras = [camHUD];
@@ -1722,6 +1730,7 @@ class PlayState extends MusicBeatState
 		{
 			if (cheating)
 			{
+				//this not error, ignore this
 				Sys.exit(0);
 			}
 			else if(FlxG.save.data.instaReset)
@@ -1975,6 +1984,10 @@ class PlayState extends MusicBeatState
 					ss = false;
 					shits++;
 					shouldSplash = false;
+					if (FlxG.save.data.hitsounds)
+						{
+							FlxG.sound.play(Paths.sound('hit'));
+						}
 				}
 				else if (noteDiff < Conductor.safeZoneOffset * -2)
 				{
@@ -1984,6 +1997,10 @@ class PlayState extends MusicBeatState
 					ss = false;
 					shits++;
 					shouldSplash = false;
+					if (FlxG.save.data.hitsounds)
+						{
+							FlxG.sound.play(Paths.sound('hit'));
+						}
 				}
 				else if (noteDiff > Conductor.safeZoneOffset * 0.50)
 				{
@@ -1993,6 +2010,10 @@ class PlayState extends MusicBeatState
 					ss = false;
 					bads++;
 					shouldSplash = false;
+					if (FlxG.save.data.hitsounds)
+						{
+							FlxG.sound.play(Paths.sound('hit'));
+						}
 				}
 				else if (noteDiff > Conductor.safeZoneOffset * 0.25)
 				{
@@ -2002,6 +2023,10 @@ class PlayState extends MusicBeatState
 					ss = false;
 					goods++;
 					shouldSplash = false;
+					if (FlxG.save.data.hitsounds)
+						{
+							FlxG.sound.play(Paths.sound('hit'));
+						}
 				}
 				else if (noteDiff > Conductor.safeZoneOffset * 0.27
 					)
@@ -2012,6 +2037,10 @@ class PlayState extends MusicBeatState
 					ss = false;
 					goods++;
 					shouldSplash = false;
+					if (FlxG.save.data.hitsounds)
+						{
+							FlxG.sound.play(Paths.sound('hit'));
+						}
 				}
 				else if (noteDiff > Conductor.safeZoneOffset * 0.20)
 				{
@@ -2020,6 +2049,10 @@ class PlayState extends MusicBeatState
 					score = 300;
 					sicks++;
 					shouldSplash = true;
+					if (FlxG.save.data.hitsounds)
+						{
+							FlxG.sound.play(Paths.sound('hit'));
+						}
 				}
 				else if (noteDiff > Conductor.safeZoneOffset * 0.15)
 				{
@@ -2028,6 +2061,10 @@ class PlayState extends MusicBeatState
 				score = 300;
 				sicks++;
 				shouldSplash = true;
+				if (FlxG.save.data.hitsounds)
+					{
+						FlxG.sound.play(Paths.sound('hit'));
+					}
 				}
 				else if (noteDiff > Conductor.safeZoneOffset * 0.9)
 				{
@@ -2036,12 +2073,20 @@ class PlayState extends MusicBeatState
 				score = 350;
 				marvs++;
 				shouldSplash = true;
+				if (FlxG.save.data.hitsounds)
+					{
+						FlxG.sound.play(Paths.sound('hit'));
+					}
 				}
 				if (daRating == 'marv')
 				{
 					totalNotesHit += 1;
 					marvs++;
 					shouldSplash = true;
+					if (FlxG.save.data.hitsounds)
+						{
+							FlxG.sound.play(Paths.sound('hit'));
+						}
 				}
 
 				if (FlxG.save.data.fullcombomod)
@@ -2565,7 +2610,7 @@ class PlayState extends MusicBeatState
 				totalPlayed += 1;
 				accuracy = totalNotesHit / totalPlayed * 100;
 	
-				judgements.text = 'Marvelous: ${marvs}\nSicks: ${sicks}\nGoods: ${goods}\nBads: ${bads}\nShits: ${shits}\nmisses: ${misses}';
+				judgements.text = 'Marvelous: ${marvs}\nSicks: ${sicks}\nGoods: ${goods}\nBads: ${bads}\nCombo: ${combo}\nmisses: ${misses}';
 			}
 
 	function noteCheck(keyP:Bool, note:Note):Void // sorry lol

@@ -48,6 +48,7 @@ class TitleState extends MusicBeatState
 
 	override public function create():Void
 	{
+
 		#if polymod
 		polymod.Polymod.init({modRoot: "mods", dirs: ['introMod']});
 		#end
@@ -63,7 +64,11 @@ class TitleState extends MusicBeatState
 		#if desktop
 		DiscordClient.initialize();
 		#end
-
+		
+		#if desktop
+		DiscordClient.changePresence("Title screen", null);
+		#end
+		
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 
 		// DEBUG BULLSHIT
