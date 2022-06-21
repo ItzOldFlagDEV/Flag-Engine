@@ -4,7 +4,7 @@ Flag Engine:
 
     -Fixed input
     -It is better and more convenient to create mods
-    -Discard Rich Presence
+    -Discord Rich Presence
 
 Flag Engine has a lot of settings:
 
