@@ -85,14 +85,17 @@ class TitleState extends MusicBeatState
 		if (FlxG.save.data.GhosTtapingOption == null)
 			FlxG.save.data.GhosTtapingOption = true;
 
-		if (FlxG.save.data.downscroll == null)
-			FlxG.save.data.downscroll = false;
+		if (FlxG.save.data.notesplash == null)
+			FlxG.save.data.notesplash = true;
 
-		if (FlxG.save.data.dfjk == null)
-			FlxG.save.data.dfjk = false;
+		if (FlxG.save.data.flagmark == null)
+			FlxG.save.data.flagmark = true;
 		
 		if (FlxG.save.data.accuracyDisplay == null)
 			FlxG.save.data.accuracyDisplay = true;
+
+		if (FlxG.save.data.versionshit == null)
+			FlxG.save.data.versionshit = true;
 			
 		FlxG.save.bind('funkin', 'ninjamuffin99');
 
@@ -211,6 +214,15 @@ class TitleState extends MusicBeatState
 		textGroup = new FlxGroup();
 
 		credGroup.add(bg);
+
+		var textBG:FlxSprite = new FlxSprite(0, FlxG.height - 26).makeGraphic(FlxG.width, 26, 0xFF000000);
+		textBG.alpha = 0.6;
+		add(textBG);
+
+		var version:FlxText = new FlxText(5, FlxG.height - 26, 0, "Flag Engine v. " + MainMenuState.FlagEngine , 20);
+		version.scrollFactor.set();
+		version.setFormat(Paths.font("vcr.ttf"), 26, FlxColor.WHITE, CENTER);
+		add(version);
 
 		credTextShit = new Alphabet(0, 0, "ninjamuffin99\nPhantomArcade\nkawaisprite\nevilsk8er", true);
 		credTextShit.screenCenter();

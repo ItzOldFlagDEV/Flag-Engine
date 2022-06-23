@@ -4,13 +4,13 @@ Flag Engine:
 
     -Fixed input
     -It is better and more convenient to create mods
-    -Discord Rich Presence
+    -Discard Rich Presence
 
 Flag Engine has a lot of settings:
 
 Gameplay settings:
 
-    -Custom Key Binds
+    -DFJK QWOP ZXNM or WASD IJKL binds option
     -Ghost tapping
     -Down scroll or Up Scroll
     -Middle scroll
@@ -23,7 +23,7 @@ Info settings:
     -Toggle Judgements
 
 Overlay settings:
-    
+
     -Toggle Memory counter
     -Toggle FPS counter
     -Toggle Version text

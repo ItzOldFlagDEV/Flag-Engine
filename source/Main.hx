@@ -8,7 +8,9 @@ import flixel.FlxG;
 import flixel.FlxGame;
 import flixel.FlxState;
 import openfl.Assets;
+import flixel.FlxObject;
 import openfl.Lib;
+import flixel.text.FlxText;
 import openfl.display.FPS;
 import openfl.display.Sprite;
 import openfl.events.Event;
@@ -77,37 +79,31 @@ class Main extends Sprite
 		addChild(game);
 
 		#if !mobile
-		fpsCounter = new FPS(10, 3, 0xFFFFFF);
-		addChild(fpsCounter);
+		display = new OverlaysMain(10, 3, 0xFFFFFF);
+		addChild(display);
+
 		toggleFPS(FlxG.save.data.fps);
+		toggleMem(FlxG.save.data.memory);
+		toggleVersion(FlxG.save.data.versionshit);
 		#end
 	}
 
 	var game:FlxGame;
 
-	var fpsCounter:FPS;
+	public static var display:OverlaysMain;
 
-	public function toggleFPS(fpsEnabled:Bool):Void {
-		fpsCounter.visible = fpsEnabled;
+	public function toggleFPS(enabled:Bool):Void
+	{
+		display.infoDisplayed[0] = enabled;
 	}
 
-	public function changeFPSColor(color:FlxColor)
+	public function toggleMem(enabled:Bool):Void
 	{
-		fpsCounter.textColor = color;
+		display.infoDisplayed[1] = enabled;
 	}
 
-	public function setFPSCap(cap:Float)
+	public function toggleVersion(enabled:Bool):Void
 	{
-		openfl.Lib.current.stage.frameRate = cap;
-	}
-
-	public function getFPSCap():Float
-	{
-		return openfl.Lib.current.stage.frameRate;
-	}
-
-	public function getFPS():Float
-	{
-		return fpsCounter.currentFPS;
+		display.infoDisplayed[2] = enabled;
 	}
 }

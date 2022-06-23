@@ -72,20 +72,13 @@ class DFJKOption extends Option
 
 	public override function press():Bool
 	{
-		FlxG.save.data.dfjk = !FlxG.save.data.dfjk;
-		
-		if (FlxG.save.data.dfjk)
-			controls.setKeyboardScheme(KeyboardScheme.Solo, true);
-		else
-			controls.setKeyboardScheme(KeyboardScheme.Duo(true), true);
-
-		display = updateDisplay();
-		return true;
+		OptionsMenu.instance.openSubState(new KeyBindMenu());
+		return false;
 	}
 
 	private override function updateDisplay():String
 	{
-		return  FlxG.save.data.dfjk ? "DFJK QWOP ZXNM Arrows" : "WASD IJKL Arrows";
+		return "Key Binds";
 	}
 }
 
@@ -358,6 +351,49 @@ class FPSOption extends Option
 	}
 }
 
+class MEMOption extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+
+	public override function press():Bool
+	{
+		FlxG.save.data.memory = !FlxG.save.data.memory;
+		(cast (Lib.current.getChildAt(0), Main)).toggleMem(FlxG.save.data.memory);
+		display = updateDisplay();
+		return true;
+	}
+
+	private override function updateDisplay():String
+	{
+		return "Memory Counter " + (!FlxG.save.data.memory ? "off" : "on");
+	}
+}
+
+class VEROption extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+
+	public override function press():Bool
+	{
+		FlxG.save.data.versionshit = !FlxG.save.data.versionshit;
+		(cast (Lib.current.getChildAt(0), Main)).toggleVersion(FlxG.save.data.versionshit);
+		display = updateDisplay();
+		return true;
+	}
+
+	private override function updateDisplay():String
+	{
+		return "Version Wathermark " + (!FlxG.save.data.versionshit ? "off" : "on");
+	}
+}
 
 class FCMod extends Option
 {

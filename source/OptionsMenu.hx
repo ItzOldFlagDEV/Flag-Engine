@@ -21,7 +21,7 @@ import Discord.DiscordClient;
 
 class OptionsMenu extends MusicBeatState
 {
-
+	public static var instance:OptionsMenu;
 
 	var selector:FlxText;
 	var curSelected:Int = 0;
@@ -39,11 +39,15 @@ class OptionsMenu extends MusicBeatState
 			new AccuracyOption("Display accuracy information."),
 			new JudgementsOption("Display judgements information.")
 		]),
+		new OptionCatagory("Overlays", [
+			new FPSOption("Toggle the FPS Counter."),
+			new MEMOption("Toggle the Memory Counter."),
+			new VEROption("Toggle the Version text.")
+		]),
 		new OptionCatagory("Other", [
 			new NotesSplashOption("Add note splashes."),
 			new FlagmarkOption("Add flag engine watermark."),
 			new ReplayOption("View replays."),
-			new FPSOption("Toggle the FPS Counter."),
 			new ToogleGUI("Toggle GUI."),
 			//new QuantOption("Stepmania style note colours."),
 			new Strums("Toggle if opponent strums glow on note hits."),
@@ -64,6 +68,7 @@ class OptionsMenu extends MusicBeatState
 
 	private var currentDescription:String = "";
 	private var grpControls:FlxTypedGroup<Alphabet>;
+	public var acceptInput:Bool = true;
 	var versionShit:FlxText;
 
 	var bg:FlxSprite;
@@ -77,6 +82,7 @@ class OptionsMenu extends MusicBeatState
 		DiscordClient.changePresence("In the Options menu", null);
 		#end
 
+		instance = this;
 		Application.current.window.title = 'Flag Engine ~ Options Menu';
 		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image("menuDesat"));
 
@@ -121,6 +127,28 @@ class OptionsMenu extends MusicBeatState
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
+		if (acceptInput)
+		{
+			if (controls.BACK && !isCat)
+				FlxG.switchState(new MainMenuState());
+			else if (controls.BACK)
+			{
+				isCat = false;
+				grpControls.clear();
+				for (i in 0...options.length)
+				{
+					var controlLabel:Alphabet = new Alphabet(0, (70 * i) + 30, options[i].getName(), true, false);
+					controlLabel.isMenuItem = true;
+					controlLabel.targetY = i;
+					grpControls.add(controlLabel);
+					// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
+				}
+				
+				curSelected = 0;
+				
+				changeSelection(curSelected);
+			}
+		}
 
 			if (controls.BACK && !isCat)
 				FlxG.switchState(new MainMenuState());

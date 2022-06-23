@@ -36,6 +36,7 @@ import openfl.events.IOErrorEvent;
 import openfl.media.Sound;
 import openfl.net.FileReference;
 import openfl.utils.ByteArray;
+import lime.app.Application;
 
 #if desktop
 import Discord.DiscordClient;
@@ -95,7 +96,8 @@ class ChartingState extends MusicBeatState
 
 	override function create()
 	{
-
+		Application.current.window.title = 'Flag Engine ~ Chart Editor (Song: ' + PlayState.SONG.song + ')';
+		DiscordClient.changePresence("In the Chart Editor " + "(Charting " + PlayState.SONG.song + ")", null);
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		bg.scrollFactor.set();
 		bg.color = 0xFF222212;

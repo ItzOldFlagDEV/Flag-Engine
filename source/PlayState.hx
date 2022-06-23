@@ -1257,10 +1257,7 @@ class PlayState extends MusicBeatState
 			switch (curStage)
 			{
 				case 'school' | 'schoolEvil':
-				if (FlxG.save.data.noteskin)
-				{
-					babyArrow.loadGraphic(Paths.image('notes/arrows-pixels'), true, 17, 17);
-				}
+					babyArrow.loadGraphic(Paths.image('weeb/pixelUI/arrows-pixels'), true, 17, 17);
 					babyArrow.animation.add('green', [6]);
 					babyArrow.animation.add('red', [7]);
 					babyArrow.animation.add('blue', [5]);
@@ -2652,9 +2649,41 @@ class PlayState extends MusicBeatState
 					}
 					else
 						totalNotesHit += 1;
-					var sploosh:FlxSprite = new FlxSprite(note.x, playerStrums.members[note.noteData].y);
-					if (!curStage.startsWith('school'))
+
+					if(SONG.song.toLowerCase() == 'senpai' || SONG.song.toLowerCase() == 'roses'|| SONG.song.toLowerCase() == 'thorns')
 					{
+					var sploosh:FlxSprite = new FlxSprite(note.x, playerStrums.members[note.noteData].y);
+						var tex:flixel.graphics.frames.FlxAtlasFrames = Paths.getSparrowAtlas('noteSplashes-pixel');
+						sploosh.frames = tex;
+						sploosh.animation.addByPrefix('splash 0 0', 'note splash purple 1', 24, false);
+						sploosh.animation.addByPrefix('splash 0 1', 'note splash blue 1', 24, false);
+						sploosh.animation.addByPrefix('splash 0 2', 'note splash green 1', 24, false);
+						sploosh.animation.addByPrefix('splash 0 3', 'note splash red 1', 24, false);
+						sploosh.animation.addByPrefix('splash 1 0', 'note splash purple 1', 24, false);
+						sploosh.animation.addByPrefix('splash 1 1', 'note splash blue 1', 24, false);
+						sploosh.animation.addByPrefix('splash 1 2', 'note splash green 1', 24, false);
+						sploosh.animation.addByPrefix('splash 1 3', 'note splash red 1', 24, false);
+						sploosh.antialiasing = true;
+						if (shouldSplash == true && !note.isSustainNote)
+						{
+					
+
+						sploosh.cameras = [camHUD];
+						sploosh.animation.play('splash ' + FlxG.random.int(0, 1) + " " + note.noteData);
+						sploosh.alpha = 1;
+						sploosh.offset.x -= -99;
+						sploosh.offset.y += 114;
+						sploosh.animation.finishCallback = function(name) sploosh.kill();
+						if (FlxG.save.data.notesplash)
+							{
+								add(sploosh);
+							}	
+						
+						}
+					}
+					else
+					{
+					var sploosh:FlxSprite = new FlxSprite(note.x, playerStrums.members[note.noteData].y);
 						var tex:flixel.graphics.frames.FlxAtlasFrames = Paths.getSparrowAtlas('noteSplashes');
 						sploosh.frames = tex;
 						sploosh.animation.addByPrefix('splash 0 0', 'note splash purple 1', 24, false);
@@ -2668,6 +2697,7 @@ class PlayState extends MusicBeatState
 						sploosh.antialiasing = true;
 						if (shouldSplash == true && !note.isSustainNote)
 						{
+					
 
 						sploosh.cameras = [camHUD];
 						sploosh.animation.play('splash ' + FlxG.random.int(0, 1) + " " + note.noteData);
