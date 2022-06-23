@@ -10,7 +10,7 @@ Flag Engine has a lot of settings:
 
 Gameplay settings:
 
-    -DFJK QWOP ZXNM or WASD IJKL binds option
+    -Custom Key Binds
     -Ghost tapping
     -Down scroll or Up Scroll
     -Middle scroll
@@ -22,12 +22,17 @@ Info settings:
     -Toggle accuracy
     -Toggle Judgements
 
+Overlay settings:
+    
+    -Toggle Memory counter
+    -Toggle FPS counter
+    -Toggle Version text
+
 Other settings:
 
     -Note Splashes
     -Flag Engine Weathermark
     -Replays(From Kade Engine)
-    -Toggle FPS counter
     -Toggle GUI
     -Toggle Glow opponent sturms
     -Hitsounds
