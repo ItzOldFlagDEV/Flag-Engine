@@ -10,7 +10,7 @@ Flag Engine has a lot of settings:
 
 Gameplay settings:
 
-    -DFJK QWOP ZXNM or WASD IJKL binds option
+    -Custom keybinds
     -Ghost tapping
     -Down scroll or Up Scroll
     -Middle scroll
