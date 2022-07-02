@@ -15,14 +15,8 @@ import flixel.util.FlxColor;
 import lime.utils.Assets;
 import lime.app.Application;
 
-#if desktop
-import Discord.DiscordClient;
-#end
-
 class OptionsMenu extends MusicBeatState
 {
-	public static var instance:OptionsMenu;
-
 	var selector:FlxText;
 	var curSelected:Int = 0;
 
@@ -33,11 +27,13 @@ class OptionsMenu extends MusicBeatState
 			new DownscrollOption("Change the layout of the strumline."),
 			new MiddleScrollOption("If enabled, BF's notes are centred, with the opponents invisible."),
 			new ResetOption("Toggle pressing R to die in game."),
-			new RespawnOption("Skips the death screen when you die.")		
+			new RespawnOption("Skips the death screen when you die.")
 		]),
-		new OptionCatagory("Info", [	
+		new OptionCatagory("Info", [
 			new AccuracyOption("Display accuracy information."),
-			new JudgementsOption("Display judgements information.")
+			new JudgementsOption("Judgements option menu"),
+			new RankSystem("Switch osu or flag ranking system"),
+			new PerfectRate("Toggle perfect rate calculator")
 		]),
 		new OptionCatagory("Overlays", [
 			new FPSOption("Toggle the FPS Counter."),
@@ -49,7 +45,7 @@ class OptionsMenu extends MusicBeatState
 			new FlagmarkOption("Add flag engine watermark."),
 			new ReplayOption("View replays."),
 			new ToogleGUI("Toggle GUI."),
-			//new QuantOption("Stepmania style note colours."),
+			// new QuantOption("Stepmania style note colours."),
 			new Strums("Toggle if opponent strums glow on note hits."),
 			new HitSounds("Toggle hit sounds")
 		]),
@@ -63,12 +59,12 @@ class OptionsMenu extends MusicBeatState
 			new FCMod("If you miss, you will die"),
 			new PFCMod("If you get below 100% accuracy, you will die"),
 			new CheatOption("Toggles the ability to cheat without consequences. You know you want to.")
-		])
+		]),
+		new OptionCatagory("Skins", [new NoteSkin("Changes note skin"), new MenuSkin("Changes menu skin")])
 	];
 
 	private var currentDescription:String = "";
 	private var grpControls:FlxTypedGroup<Alphabet>;
-	public var acceptInput:Bool = true;
 	var versionShit:FlxText;
 
 	var bg:FlxSprite;
@@ -78,11 +74,6 @@ class OptionsMenu extends MusicBeatState
 
 	override function create()
 	{
-		#if desktop
-		DiscordClient.changePresence("In the Options menu", null);
-		#end
-
-		instance = this;
 		Application.current.window.title = 'Flag Engine ~ Options Menu';
 		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image("menuDesat"));
 
@@ -116,104 +107,82 @@ class OptionsMenu extends MusicBeatState
 
 		super.create();
 	}
-	
-	function truncateFloat( number : Float, precision : Int): Float {
+
+	function truncateFloat(number:Float, precision:Int):Float
+	{
 		var num = number;
 		num = num * Math.pow(10, precision);
-		num = Math.round( num ) / Math.pow(10, precision);
+		num = Math.round(num) / Math.pow(10, precision);
 		return num;
-		}
+	}
 
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-		if (acceptInput)
+
+		if (controls.BACK && !isCat)
+			FlxG.switchState(new MainMenuState());
+		else if (controls.BACK)
 		{
-			if (controls.BACK && !isCat)
-				FlxG.switchState(new MainMenuState());
-			else if (controls.BACK)
+			isCat = false;
+			grpControls.clear();
+			for (i in 0...options.length)
 			{
-				isCat = false;
-				grpControls.clear();
-				for (i in 0...options.length)
+				var controlLabel:Alphabet = new Alphabet(0, (70 * i) + 30, options[i].getName(), true, false);
+				controlLabel.isMenuItem = true;
+				controlLabel.targetY = i;
+				grpControls.add(controlLabel);
+				// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
+			}
+			curSelected = 0;
+		}
+		if (controls.UP_P)
+			changeSelection(-1);
+		if (controls.DOWN_P)
+			changeSelection(1);
+
+		if (isCat)
+		{
+		}
+		else
+		{
+			if (FlxG.keys.pressed.RIGHT)
+				FlxG.save.data.offset += 0.01;
+
+			if (FlxG.keys.pressed.LEFT)
+				FlxG.save.data.offset -= 0.01;
+
+			versionShit.text = "Offset (Left, Right): " + truncateFloat(FlxG.save.data.offset, 2) + " - Description - " + currentDescription;
+		}
+
+		if (controls.ACCEPT)
+		{
+			if (isCat)
+			{
+				if (currentSelectedCat.getOptions()[curSelected].press())
 				{
-					var controlLabel:Alphabet = new Alphabet(0, (70 * i) + 30, options[i].getName(), true, false);
+					grpControls.remove(grpControls.members[curSelected]);
+					var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, currentSelectedCat.getOptions()[curSelected].getDisplay(), true, false);
+					ctrl.isMenuItem = true;
+					grpControls.add(ctrl);
+				}
+			}
+			else
+			{
+				currentSelectedCat = options[curSelected];
+				isCat = true;
+				grpControls.clear();
+				for (i in 0...currentSelectedCat.getOptions().length)
+				{
+					var controlLabel:Alphabet = new Alphabet(0, (70 * i) + 30, currentSelectedCat.getOptions()[i].getDisplay(), true, false);
 					controlLabel.isMenuItem = true;
 					controlLabel.targetY = i;
 					grpControls.add(controlLabel);
 					// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
 				}
-				
 				curSelected = 0;
-				
-				changeSelection(curSelected);
 			}
 		}
-
-			if (controls.BACK && !isCat)
-				FlxG.switchState(new MainMenuState());
-			else if (controls.BACK)
-			{
-				isCat = false;
-				grpControls.clear();
-				for (i in 0...options.length)
-					{
-						var controlLabel:Alphabet = new Alphabet(0, (70 * i) + 30, options[i].getName(), true, false);
-						controlLabel.isMenuItem = true;
-						controlLabel.targetY = i;
-						grpControls.add(controlLabel);
-						// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
-					}
-				curSelected = 0;
-			}
-			if (controls.UP_P)
-				changeSelection(-1);
-			if (controls.DOWN_P)
-				changeSelection(1);
-			
-			if (isCat)
-			{
-		
-			}
-			else
-			{
-				if (FlxG.keys.pressed.RIGHT)
-					FlxG.save.data.offset+= 0.01;
-
-				if (FlxG.keys.pressed.LEFT)
-					FlxG.save.data.offset-= 0.01;
-				
-				versionShit.text = "Offset (Left, Right): " + truncateFloat(FlxG.save.data.offset,2) + " - Description - " + currentDescription;
-			}
-		
-
-			if (controls.ACCEPT)
-			{
-				if (isCat)
-				{
-					if (currentSelectedCat.getOptions()[curSelected].press()) {
-						grpControls.remove(grpControls.members[curSelected]);
-						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, currentSelectedCat.getOptions()[curSelected].getDisplay(), true, false);
-						ctrl.isMenuItem = true;
-						grpControls.add(ctrl);
-					}
-				}
-				else
-				{
-					currentSelectedCat = options[curSelected];
-					isCat = true;
-					grpControls.clear();
-					for (i in 0...currentSelectedCat.getOptions().length)
-						{
-							var controlLabel:Alphabet = new Alphabet(0, (70 * i) + 30, currentSelectedCat.getOptions()[i].getDisplay(), true, false);
-							controlLabel.isMenuItem = true;
-							controlLabel.targetY = i;
-							grpControls.add(controlLabel);
-							// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
-						}
-					curSelected = 0;
-				}
-			}
 		FlxG.save.flush();
 	}
 
@@ -224,7 +193,7 @@ class OptionsMenu extends MusicBeatState
 		#if !switch
 		// NGio.logEvent("Fresh");
 		#end
-		
+
 		FlxG.sound.play(Paths.sound("scrollMenu"), 0.4);
 
 		curSelected += change;

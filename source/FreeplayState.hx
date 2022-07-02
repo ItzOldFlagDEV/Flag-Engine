@@ -11,7 +11,6 @@ import flixel.util.FlxColor;
 import flixel.system.FlxSound;
 import lime.utils.Assets;
 import lime.app.Application;
-
 #if desktop
 import Discord.DiscordClient;
 #end
@@ -20,7 +19,6 @@ using StringTools;
 
 class FreeplayState extends MusicBeatState
 {
-
 	var songs:Array<SongMetadata> = [];
 
 	var selector:FlxText;
@@ -40,7 +38,6 @@ class FreeplayState extends MusicBeatState
 
 	override function create()
 	{
-
 		Application.current.window.title = 'Flag Engine ~ Freeplay Menu';
 		var initSonglist = CoolUtil.coolTextFile(Paths.txt('freeplaySonglist'));
 
@@ -63,14 +60,14 @@ class FreeplayState extends MusicBeatState
 		isDebug = true;
 		#end
 
-			addWeek(['Bopeebo', 'Fresh', 'Dadbattle'], 1, ['dad']);
-			addWeek(['Spookeez', 'South', 'Monster'], 2, ['spooky', 'spooky', 'monster']);
-			addWeek(['Pico', 'Philly', 'Blammed'], 3, ['pico']);
+		addWeek(['Bopeebo', 'Fresh', 'Dadbattle'], 1, ['dad']);
+		addWeek(['Spookeez', 'South', 'Monster'], 2, ['spooky', 'spooky', 'monster']);
+		addWeek(['Pico', 'Philly', 'Blammed'], 3, ['pico']);
 
-			addWeek(['Satin-Panties', 'High', 'Milf'], 4, ['mom']);
-			addWeek(['Cocoa', 'Eggnog', 'Winter-Horrorland'], 5, ['parents-christmas', 'parents-christmas', 'monster-christmas']);
-			
-			addWeek(['Senpai', 'Roses', 'Thorns'], 6, ['senpai', 'senpai', 'spirit']);
+		addWeek(['Satin-Panties', 'High', 'Milf'], 4, ['mom']);
+		addWeek(['Cocoa', 'Eggnog', 'Winter-Horrorland'], 5, ['parents-christmas', 'parents-christmas', 'monster-christmas']);
+
+		addWeek(['Senpai', 'Roses', 'Thorns'], 6, ['senpai', 'senpai', 'spirit']);
 
 		// LOAD MUSIC
 
@@ -78,6 +75,25 @@ class FreeplayState extends MusicBeatState
 
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuBGBlue'));
 		add(bg);
+
+		if (FlxG.save.data.menuskin)
+		{
+			var bgg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('flagsimages/fungridFreeplay'));
+			bgg.scrollFactor.set();
+			bgg.screenCenter();
+			bgg.velocity.set(15, 15);
+			bgg.antialiasing = true;
+			bgg.alpha = 0.15;
+			add(bgg);
+
+			var block:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('flagsimages/block'));
+			block.setGraphicSize(Std.int(block.width * 1.1));
+			block.updateHitbox();
+			block.screenCenter();
+			block.antialiasing = true;
+			block.scrollFactor.set();
+			add(block);
+		}
 
 		grpSongs = new FlxTypedGroup<Alphabet>();
 		add(grpSongs);
@@ -145,13 +161,14 @@ class FreeplayState extends MusicBeatState
 
 			trace(md);
 		 */
-		 var textBG:FlxSprite = new FlxSprite(0, FlxG.height - 26).makeGraphic(FlxG.width, 26, 0xFF000000);
-		 textBG.alpha = 0.6;
-		 add(textBG);
-		 var text:FlxText = new FlxText(textBG.x, textBG.y + 4, FlxG.width, "Press SHIFT to preview OST of song", 20);
-		 text.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER);
-		 text.scrollFactor.set();
-		 add(text);
+
+		var textBG:FlxSprite = new FlxSprite(0, FlxG.height - 26).makeGraphic(FlxG.width, 26, 0xFF000000);
+		textBG.alpha = 0.6;
+		add(textBG);
+		var text:FlxText = new FlxText(textBG.x, textBG.y + 4, FlxG.width, "Press SHIFT to preview OST of song", 20);
+		text.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER);
+		text.scrollFactor.set();
+		add(text);
 
 		#if desktop
 		DiscordClient.changePresence("In the Freeplay menu", null);
@@ -202,14 +219,14 @@ class FreeplayState extends MusicBeatState
 		var shift = FlxG.keys.justPressed.SHIFT;
 		var ctrl = FlxG.keys.justPressed.CONTROL;
 
-		if(shift)
+		if (shift)
 		{
 			FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0);
-			//This works but with bugs
-			//vocals = new FlxSound();
-			//vocals = new FlxSound().loadEmbedded(Paths.voices(songs[curSelected].songName));
-			//vocals.play();
-			Application.current.window.title = 'Flag Engine ~ Freeplay Menu (Listening to ' + songs[curSelected].songName +')';
+			// This works but with bugs
+			// vocals = new FlxSound();
+			// vocals = new FlxSound().loadEmbedded(Paths.voices(songs[curSelected].songName));
+			// vocals.play();
+			Application.current.window.title = 'Flag Engine ~ Freeplay Menu (Listening to ' + songs[curSelected].songName + ')';
 			#if desktop
 			DiscordClient.changePresence("In the Freeplay menu " + "(Listening to " + songs[curSelected].songName + ")", null);
 			#end
@@ -298,7 +315,6 @@ class FreeplayState extends MusicBeatState
 		#end
 
 		#if PRELOAD_ALL
-		
 		#end
 
 		var bullShit:Int = 0;

@@ -85,6 +85,9 @@ class Main extends Sprite
 		toggleFPS(FlxG.save.data.fps);
 		toggleMem(FlxG.save.data.memory);
 		toggleVersion(FlxG.save.data.versionshit);
+
+		FlxG.save.data.MEMOption = true;
+		FlxG.save.data.FPSOption = true;
 		#end
 	}
 

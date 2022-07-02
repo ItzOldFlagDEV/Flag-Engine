@@ -35,7 +35,7 @@ typedef ReplayJSON =
 
 class Replay
 {
-    public static var version:String = "1.0"; // replay file version
+    public static var version:String = "Flag Engine 1.1"; // replay file version
 
     public var path:String = "";
     public var replay:ReplayJSON;

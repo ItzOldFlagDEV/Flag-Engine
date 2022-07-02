@@ -23,7 +23,7 @@ import flixel.util.FlxTimer;
 import io.newgrounds.NG;
 import lime.app.Application;
 import openfl.Assets;
-
+import flixel.addons.display.FlxBackdrop;
 #if desktop
 import Discord.DiscordClient;
 import sys.thread.Thread;
@@ -41,6 +41,7 @@ class TitleState extends MusicBeatState
 	var textGroup:FlxGroup;
 	var ngSpr:FlxSprite;
 	var FunkyPikmin:FlxSprite;
+	var flashing:Int;
 
 	var curWacky:Array<String> = [];
 
@@ -48,27 +49,26 @@ class TitleState extends MusicBeatState
 
 	override public function create():Void
 	{
-
 		#if polymod
 		polymod.Polymod.init({modRoot: "mods", dirs: ['introMod']});
 		#end
-		
+
 		#if sys
 		if (!sys.FileSystem.exists(Sys.getCwd() + "\\assets\\replays"))
 			sys.FileSystem.createDirectory(Sys.getCwd() + "\\assets\\replays");
 		#end
-		
+
 		Application.current.window.title = 'Flag Engine ~ Title Screen';
 		PlayerSettings.init();
 
 		#if desktop
 		DiscordClient.initialize();
 		#end
-		
+
 		#if desktop
 		DiscordClient.changePresence("Title screen", null);
 		#end
-		
+
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 
 		// DEBUG BULLSHIT
@@ -90,13 +90,22 @@ class TitleState extends MusicBeatState
 
 		if (FlxG.save.data.flagmark == null)
 			FlxG.save.data.flagmark = true;
-		
+
 		if (FlxG.save.data.accuracyDisplay == null)
 			FlxG.save.data.accuracyDisplay = true;
 
 		if (FlxG.save.data.versionshit == null)
 			FlxG.save.data.versionshit = true;
-			
+
+		if (FlxG.save.data.menuskin == null)
+			FlxG.save.data.menuskin = false;
+
+		if (FlxG.save.data.judoutline == null)
+			FlxG.save.data.judoutline = false;
+
+		if (FlxG.save.data.judalpha == null)
+			FlxG.save.data.judalpha = false;
+
 		FlxG.save.bind('funkin', 'ninjamuffin99');
 
 		Highscore.load();
@@ -164,12 +173,49 @@ class TitleState extends MusicBeatState
 		Conductor.changeBPM(102);
 		persistentUpdate = true;
 
-		var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuBG'));
-		bg.setGraphicSize(Std.int(bg.width * 1.1));
-		bg.updateHitbox();
-		bg.screenCenter();
-		bg.antialiasing = true;
-		add(bg);
+			var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuDesat'));
+			bg.color = 0x69007E;
+			bg.setGraphicSize(Std.int(bg.width * 1.1));
+			bg.updateHitbox();
+			bg.screenCenter();
+			bg.antialiasing = true;
+
+			var bgmain:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuDesat'));
+			bgmain.color = 0x88FF00;
+			bgmain.setGraphicSize(Std.int(bgmain.width * 1.1));
+			bgmain.updateHitbox();
+			bgmain.screenCenter();
+			bgmain.antialiasing = true;
+			
+		if (FlxG.save.data.menuskin)
+			{
+			add(bgmain);
+			}
+
+			var bgg:FlxSprite;
+			var block:FlxSprite;
+
+			var bgg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('flagsimages/fungridTitle'));
+			bgg.scrollFactor.set();
+			bgg.screenCenter();
+			bgg.velocity.set(15, 15);
+			bgg.antialiasing = true;
+			bgg.alpha = 0.25;
+			
+		if (FlxG.save.data.menuskin)
+			{
+			add(bgg);
+			}
+
+		var block:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('flagsimages/block'));
+		block.setGraphicSize(Std.int(block.width * 1.1));
+		block.updateHitbox();
+		block.screenCenter();
+		block.antialiasing = true;
+		if (FlxG.save.data.menuskin)
+			{
+		add(block);
+			}
 
 		logoBl = new FlxSprite(-150, -100);
 		logoBl.frames = Paths.getSparrowAtlas('logoBumpin');
@@ -177,7 +223,7 @@ class TitleState extends MusicBeatState
 		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24);
 		logoBl.animation.play('bump');
 		logoBl.updateHitbox();
-		logoBl.screenCenter();
+		logoBl.x += 10;
 		// logoBl.color = FlxColor.BLACK;
 
 		gfDance = new FlxSprite(FlxG.width * 0.4, FlxG.height * 0.07);
@@ -185,7 +231,6 @@ class TitleState extends MusicBeatState
 		gfDance.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
 		gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
 		gfDance.antialiasing = true;
-		gfDance.visible = false;
 		add(gfDance);
 		add(logoBl);
 
@@ -207,19 +252,25 @@ class TitleState extends MusicBeatState
 		// FlxTween.tween(logoBl, {y: logoBl.y + 50}, 0.6, {ease: FlxEase.quadInOut, type: PINGPONG});
 		// FlxTween.tween(logo, {y: logoBl.y + 50}, 0.6, {ease: FlxEase.quadInOut, type: PINGPONG, startDelay: 0.1});
 
-		
-
 		credGroup = new FlxGroup();
 		add(credGroup);
 		textGroup = new FlxGroup();
 
-		credGroup.add(bg);
+		var bgb:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+		bgb.alpha = 1;
+		bgb.scrollFactor.set();
+		credGroup.add(bgb);
+
+		if (FlxG.save.data.menuskin)
+		{
+			credGroup.add(bg);
+		}
 
 		var textBG:FlxSprite = new FlxSprite(0, FlxG.height - 26).makeGraphic(FlxG.width, 26, 0xFF000000);
 		textBG.alpha = 0.6;
 		add(textBG);
 
-		var version:FlxText = new FlxText(5, FlxG.height - 26, 0, "Flag Engine v. " + MainMenuState.FlagEngine , 20);
+		var version:FlxText = new FlxText(5, FlxG.height - 26, 0, "Flag Engine v. " + MainMenuState.FlagEngine, 20);
 		version.scrollFactor.set();
 		version.setFormat(Paths.font("vcr.ttf"), 26, FlxColor.WHITE, CENTER);
 		add(version);
@@ -332,7 +383,7 @@ class TitleState extends MusicBeatState
 
 			new FlxTimer().start(2, function(tmr:FlxTimer)
 			{
-				FlxG.switchState(new MainMenuState());
+				FlxG.switchState(new FlashingLights());
 			});
 			// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
 		}

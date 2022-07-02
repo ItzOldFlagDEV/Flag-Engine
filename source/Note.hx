@@ -65,11 +65,23 @@ class Note extends FlxSprite
 		switch (daStage)
 		{
 			case 'school' | 'schoolEvil':
+			
+			if (FlxG.save.data.noteskin)
+			{
+				loadGraphic(Paths.image('Circles/Circles-pixel', 'shared'), true, 17, 17);
+				if (isSustainNote)
+				{
+					loadGraphic(Paths.image('weeb/pixelUI/arrowEnds'), true, 7, 6);
+				}
+			}
+			else
+			{
 				loadGraphic(Paths.image('weeb/pixelUI/arrows-pixels'), true, 17, 17);
 				if (isSustainNote)
 				{
 					loadGraphic(Paths.image('weeb/pixelUI/arrowEnds'), true, 7, 6);
 				}
+			}
 
 				for (i in 0...4)
 				{
@@ -82,7 +94,14 @@ class Note extends FlxSprite
 				updateHitbox();
 
 			default:
+				if (FlxG.save.data.noteskin)
+				{
+				frames = Paths.getSparrowAtlas('Circles/Circles', 'shared');
+				}
+				else
+				{
 				frames = Paths.getSparrowAtlas('NOTE_assets');
+				}
 
 				for (i in 0...4)
 				{
