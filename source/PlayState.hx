@@ -110,7 +110,8 @@ class PlayState extends MusicBeatState
 
 	public static var misses:Int = 0;
 
-	private var accuracy:Float = 100.00;
+	public static var accuracy:Float = 100.00;
+
 	private var totalNotesHit:Float = 0;
 	private var totalPlayed:Int = 0;
 	private var ss:Bool = false;
@@ -155,7 +156,7 @@ class PlayState extends MusicBeatState
 	var songScore:Int = 0;
 	var scoreTxt:FlxText;
 	var replayTxt:FlxText;
-	
+
 	var judgements:FlxText;
 	var judgements1:FlxText;
 	var judgementscombo:FlxText;
@@ -821,8 +822,8 @@ class PlayState extends MusicBeatState
 		judgements.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		if (FlxG.save.data.judoutline)
 		{
-		judgements.borderSize = 1;
-		judgements.borderQuality = 1;
+			judgements.borderSize = 1;
+			judgements.borderQuality = 1;
 		}
 		if (FlxG.save.data.judalpha)
 		{
@@ -841,8 +842,8 @@ class PlayState extends MusicBeatState
 		judgements1.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		if (FlxG.save.data.judoutline)
 		{
-		judgements1.borderSize = 1;
-		judgements1.borderQuality = 1;
+			judgements1.borderSize = 1;
+			judgements1.borderQuality = 1;
 		}
 		if (FlxG.save.data.judalpha)
 		{
@@ -852,7 +853,7 @@ class PlayState extends MusicBeatState
 		judgements1.cameras = [camHUD];
 		judgements1.screenCenter(Y);
 		judgements1.y -= -110;
-		judgements1.text = 'Total note hits: ${marvs + goods + bads + shits}\nmisses: ${misses}';
+		judgements1.text = 'Total note hits: ${marvs + sicks + goods + bads + shits}\nmisses: ${misses}';
 		if (FlxG.save.data.judgementstotal)
 		{
 			add(judgements1);
@@ -862,8 +863,8 @@ class PlayState extends MusicBeatState
 		judgementscombo.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		if (FlxG.save.data.judoutline)
 		{
-		judgementscombo.borderSize = 1;
-		judgementscombo.borderQuality = 1;
+			judgementscombo.borderSize = 1;
+			judgementscombo.borderQuality = 1;
 		}
 		if (FlxG.save.data.judalpha)
 		{
@@ -1603,11 +1604,12 @@ class PlayState extends MusicBeatState
 		if (FlxG.save.data.accuracyDisplay)
 		{
 			scoreTxt.screenCenter(X);
-			scoreTxt.text = "Score:" + songScore + "  Combo Breaks:" + misses + "  Accuracy:" + truncateFloat(accuracy, 2) + "% " + "| " + rating;
+			scoreTxt.text = "Score:" + songScore + " | " + "Misses:" + misses + " | " + "Accuracy:" + truncateFloat(accuracy, 2) + "% " + "| " + rating;
 		}
 		else
 		{
 			scoreTxt.text = "Score:" + songScore;
+			scoreTxt.screenCenter(X);
 		}
 		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
 		{
@@ -2098,7 +2100,14 @@ class PlayState extends MusicBeatState
 				transIn = FlxTransitionableState.defaultTransIn;
 				transOut = FlxTransitionableState.defaultTransOut;
 
-				FlxG.switchState(new StoryMenuState());
+				if (FlxG.save.data.resultsong)
+				{
+					FlxG.switchState(new ResultState());
+				}
+				else
+				{
+					FlxG.switchState(new StoryMenuState());
+				}
 
 				// if ()
 				StoryMenuState.weekUnlocked[Std.int(Math.min(storyWeek + 1, StoryMenuState.weekUnlocked.length - 1))] = true;
@@ -2148,8 +2157,14 @@ class PlayState extends MusicBeatState
 		}
 		else
 		{
-			trace('WENT BACK TO FREEPLAY??');
-			FlxG.switchState(new FreeplayState());
+			if (FlxG.save.data.resultsong)
+			{
+				FlxG.switchState(new ResultState());
+			}
+			else
+			{
+				FlxG.switchState(new FreeplayState());
+			}
 		}
 	}
 
@@ -2817,7 +2832,7 @@ class PlayState extends MusicBeatState
 		judgements.text = 'Marvelous: ${marvs}\nSicks: ${sicks}\nGoods: ${goods}\nBads: ${bads}\nMisses: ${misses}\nmisses: ${misses}';
 		perfectrate.text = 'PR: ${truncateFloat((marvs + sicks) / (goods + (bads * 1.1) + (misses * 1.3)), 2)}\nSicks: ${sicks}';
 		judgementscombo.text = 'Combo: ${combo}\nmisses: ${misses}';
-		judgements1.text = 'Total note hits: ${marvs + goods + bads + shits}\nmisses: ${misses}';
+		judgements1.text = 'Total note hits: ${marvs + sicks + goods + bads + shits}\nmisses: ${misses}';
 		perfectrate.screenCenter(X);
 	}
 

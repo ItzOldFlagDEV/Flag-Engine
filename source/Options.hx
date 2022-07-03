@@ -764,7 +764,7 @@ class JudgementsOutline extends Option
 
 	private override function updateDisplay():String
 	{
-		return FlxG.save.data.judoutline ? "Outline Off" : "Outline On";
+		return FlxG.save.data.judoutline ? "Outline On" : "Outline Off";
 	}
 }
 
@@ -786,5 +786,26 @@ class JudgementsAlpha extends Option
 	private override function updateDisplay():String
 	{
 		return FlxG.save.data.judalpha ? "Transparency Half" : "Transparency Full";
+	}
+}
+
+class SongResult extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+
+	public override function press():Bool
+	{
+		FlxG.save.data.resultsong = !FlxG.save.data.resultsong;
+		display = updateDisplay();
+		return true;
+	}
+
+	private override function updateDisplay():String
+	{
+		return FlxG.save.data.resultsong ? "Result screen On" : "Result screen Off";
 	}
 }

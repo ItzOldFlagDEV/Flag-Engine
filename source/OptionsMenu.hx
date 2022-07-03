@@ -33,7 +33,8 @@ class OptionsMenu extends MusicBeatState
 			new AccuracyOption("Display accuracy information."),
 			new JudgementsOption("Judgements option menu"),
 			new RankSystem("Switch osu or flag ranking system"),
-			new PerfectRate("Toggle perfect rate calculator")
+			new PerfectRate("Toggle perfect rate calculator"),
+			new SongResult("Toggle end song result screen")
 		]),
 		new OptionCatagory("Overlays", [
 			new FPSOption("Toggle the FPS Counter."),

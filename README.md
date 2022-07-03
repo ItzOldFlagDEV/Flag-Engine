@@ -22,6 +22,7 @@ Info settings:
     -Toggle accuracy
     -Ranking system (osu!mania or Flag)
     -P/R (Prefect rate)
+    -End song result screen
 
 Judgements settings:
 
