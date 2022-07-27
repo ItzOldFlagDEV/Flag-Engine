@@ -79,5 +79,3 @@ Original:
  Flag Engine:
 - [OldFlag](https://www.youtube.com/channel/UCSoMQrybz6_rhQgtmHO2IFQ) - Main programming. [GitHub](https://github.com/ItzOldFlagDEV).
 - [FunkyPikmin](https://www.youtube.com/channel/UCJAEffFHkDM1g8Nrvea0FYg) - Programming. [GitHub](https://github.com/FunkyPikmin).
-
-1.2 developing...
