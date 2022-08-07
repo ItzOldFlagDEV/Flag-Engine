@@ -14,6 +14,16 @@ import flixel.text.FlxText;
 import openfl.display.FPS;
 import openfl.display.Sprite;
 import openfl.events.Event;
+#if CRASH_HANDLER
+import lime.app.Application;
+import openfl.events.UncaughtErrorEvent;
+import haxe.CallStack;
+import haxe.io.Path;
+import Discord.DiscordClient;
+import sys.FileSystem;
+import sys.io.File;
+import sys.io.Process;
+#end
 
 class Main extends Sprite
 {
@@ -21,7 +31,7 @@ class Main extends Sprite
 	var gameHeight:Int = 720; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
 	var initialState:Class<FlxState> = TitleState; // The FlxState the game starts with.
 	var zoom:Float = -1; // If -1, zoom is automatically calculated to fit the window dimensions.
-	var framerate:Int = 120; // How many frames per second the game should run at.
+	var framerate:Int = 60; // How many frames per second the game should run at.
 	var skipSplash:Bool = true; // Whether to skip the flixel splash screen that appears in release mode.
 	var startFullscreen:Bool = false; // Whether to start the game in fullscreen on desktop targets
 
@@ -85,10 +95,14 @@ class Main extends Sprite
 		toggleFPS(FlxG.save.data.fps);
 		toggleMem(FlxG.save.data.memory);
 		toggleVersion(FlxG.save.data.versionshit);
+		toggleResolution(FlxG.save.data.resolutionOverlay);
 
 		FlxG.save.data.MEMOption = true;
 		FlxG.save.data.FPSOption = true;
 		#end
+
+		// Set options (Ignore this)
+		OptionsDefaults.updateOptionsData();
 	}
 
 	var game:FlxGame;
@@ -108,5 +122,10 @@ class Main extends Sprite
 	public function toggleVersion(enabled:Bool):Void
 	{
 		display.infoDisplayed[2] = enabled;
+	}
+
+	public function toggleResolution(enabled:Bool):Void
+	{
+		display.infoDisplayed[3] = enabled;
 	}
 }

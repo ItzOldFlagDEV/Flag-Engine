@@ -15,7 +15,6 @@ class Highscore
 	{
 		var daSong:String = formatSong(song, diff);
 
-
 		#if !switch
 		NGio.postScore(score, song);
 		#end

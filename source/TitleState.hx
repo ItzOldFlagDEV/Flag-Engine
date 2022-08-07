@@ -82,30 +82,6 @@ class TitleState extends MusicBeatState
 		trace('NEWGROUNDS LOL');
 		#end
 
-		if (FlxG.save.data.GhosTtapingOption == null)
-			FlxG.save.data.GhosTtapingOption = true;
-
-		if (FlxG.save.data.notesplash == null)
-			FlxG.save.data.notesplash = true;
-
-		if (FlxG.save.data.flagmark == null)
-			FlxG.save.data.flagmark = true;
-
-		if (FlxG.save.data.accuracyDisplay == null)
-			FlxG.save.data.accuracyDisplay = true;
-
-		if (FlxG.save.data.versionshit == null)
-			FlxG.save.data.versionshit = true;
-
-		if (FlxG.save.data.menuskin == null)
-			FlxG.save.data.menuskin = false;
-
-		if (FlxG.save.data.judoutline == null)
-			FlxG.save.data.judoutline = false;
-
-		if (FlxG.save.data.judalpha == null)
-			FlxG.save.data.judalpha = false;
-
 		FlxG.save.bind('funkin', 'ninjamuffin99');
 
 		Highscore.load();
@@ -143,6 +119,11 @@ class TitleState extends MusicBeatState
 
 	function startIntro()
 	{
+		#if desktop
+		FlxG.updateFramerate = FlxG.save.data.fpsCap;
+		FlxG.drawFramerate = FlxG.save.data.fpsCap;
+		#end
+		
 		if (!initialized)
 		{
 			var diamond:FlxGraphic = FlxGraphic.fromClass(GraphicTransTileDiamond);
@@ -173,49 +154,11 @@ class TitleState extends MusicBeatState
 		Conductor.changeBPM(102);
 		persistentUpdate = true;
 
-			var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuDesat'));
-			bg.color = 0x69007E;
-			bg.setGraphicSize(Std.int(bg.width * 1.1));
-			bg.updateHitbox();
-			bg.screenCenter();
-			bg.antialiasing = true;
-
-			var bgmain:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuDesat'));
-			bgmain.color = 0x88FF00;
-			bgmain.setGraphicSize(Std.int(bgmain.width * 1.1));
-			bgmain.updateHitbox();
-			bgmain.screenCenter();
-			bgmain.antialiasing = true;
-			
-		if (FlxG.save.data.menuskin)
-			{
-			add(bgmain);
-			}
-
-			var bgg:FlxSprite;
-			var block:FlxSprite;
-
-			var bgg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('flagsimages/fungridTitle'));
-			bgg.scrollFactor.set();
-			bgg.screenCenter();
-			bgg.velocity.set(15, 15);
-			bgg.antialiasing = true;
-			bgg.alpha = 0.25;
-			
-		if (FlxG.save.data.menuskin)
-			{
-			add(bgg);
-			}
-
-		var block:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('flagsimages/block'));
-		block.setGraphicSize(Std.int(block.width * 1.1));
-		block.updateHitbox();
-		block.screenCenter();
-		block.antialiasing = true;
-		if (FlxG.save.data.menuskin)
-			{
-		add(block);
-			}
+		var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuBG'));
+		bg.setGraphicSize(Std.int(bg.width * 1.1));
+		bg.updateHitbox();
+		bg.screenCenter();
+		bg.antialiasing = true;
 
 		logoBl = new FlxSprite(-150, -100);
 		logoBl.frames = Paths.getSparrowAtlas('logoBumpin');
@@ -260,11 +203,6 @@ class TitleState extends MusicBeatState
 		bgb.alpha = 1;
 		bgb.scrollFactor.set();
 		credGroup.add(bgb);
-
-		if (FlxG.save.data.menuskin)
-		{
-			credGroup.add(bg);
-		}
 
 		var textBG:FlxSprite = new FlxSprite(0, FlxG.height - 26).makeGraphic(FlxG.width, 26, 0xFF000000);
 		textBG.alpha = 0.6;

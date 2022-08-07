@@ -28,17 +28,17 @@ class MainMenuState extends MusicBeatState
 	var menuItems:FlxTypedGroup<FlxSprite>;
 
 	#if !switch
-	var optionShit:Array<String> = ['story mode', 'freeplay', 'donate', 'options'];
+	var optionShit:Array<String> = ['story mode', 'freeplay', 'credits', 'donate', 'options'];
 	#else
-	var optionShit:Array<String> = ['story mode', 'freeplay'];
+	var optionShit:Array<String> = ['story mode', 'freeplay', 'credits'];
 	#end
 
 	var newGaming:FlxText;
 	var newGaming2:FlxText;
 	var GhosTtapingOption:Bool = true;
 
-	public static var gameVer:String = "0.2.7.1";
-	public static var FlagEngine:String = "1.1.1";
+	public static var gameVer:String = "0.2.8";
+	public static var FlagEngine:String = "1.2";
 
 	var magenta:FlxSprite;
 	var bgGirls:FlxSprite;
@@ -65,48 +65,16 @@ class MainMenuState extends MusicBeatState
 		camFollow = new FlxObject(0, 0, 1, 1);
 		add(camFollow);
 
-		if (FlxG.save.data.menuskin)
-		{
-			var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuDesat'));
-			bg.color = 0x00FF00;
-			bg.setGraphicSize(Std.int(bg.width * 1.1));
-			bg.updateHitbox();
-			bg.screenCenter();
-			bg.scrollFactor.set();
-			bg.antialiasing = true;
-			add(bg);
-
-			var bgg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('flagsimages/fungridStory'));
-			bgg.scrollFactor.set();
-			bgg.screenCenter();
-			bgg.velocity.set(15, 15);
-			bgg.antialiasing = true;
-			bgg.alpha = 0.15;
-			add(bgg);
-
-			var block:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('flagsimages/block'));
-			block.setGraphicSize(Std.int(block.width * 1.1));
-			block.updateHitbox();
-			block.screenCenter();
-			block.antialiasing = true;
-			block.scrollFactor.set();
-			add(block);
-		}
-		else
-		{
-			var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuBG'));
-			bg.setGraphicSize(Std.int(bg.width * 1.1));
-			bg.updateHitbox();
-			bg.screenCenter();
-			bg.antialiasing = true;
-			bg.scrollFactor.x = 0;
-			bg.scrollFactor.y = 0.18;
-			add(bg);
-		}
+		var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuBG'));
+		bg.setGraphicSize(Std.int(bg.width * 1.1));
+		bg.updateHitbox();
+		bg.screenCenter();
+		bg.antialiasing = true;
+		bg.scrollFactor.set();
+		add(bg);
 
 		magenta = new FlxSprite(-80).loadGraphic(Paths.image('menuCus'));
-		magenta.scrollFactor.x = 0;
-		magenta.scrollFactor.y = 0.18;
+		magenta.scrollFactor.set();
 
 		menuItems = new FlxTypedGroup<FlxSprite>();
 		add(menuItems);
@@ -121,35 +89,14 @@ class MainMenuState extends MusicBeatState
 			menuItem.animation.addByPrefix('selected', optionShit[i] + " white", 24);
 			menuItem.animation.play('idle');
 			menuItem.ID = i;
-			if (FlxG.save.data.menuskin)
-			{
-				menuItem.x = 50;
-			}
-			else
-			{
-				menuItem.screenCenter(X);
-			}
+			menuItem.screenCenter(X);
+			menuItem.y -= 120;
 			menuItems.add(menuItem);
-			menuItem.scrollFactor.set();
+			menuItem.scrollFactor.set(0, 0.25);
 			menuItem.antialiasing = true;
-
-			if (FlxG.save.data.menuskin)
-			{
-				switch (i)
-				{
-					case 0:
-						menuItem.x += 0;
-					case 1:
-						menuItem.x += 45;
-					case 2:
-						menuItem.x += 90;
-					case 3:
-						menuItem.x += 135;
-				}
-			}
 		}
 
-		FlxG.camera.follow(camFollow, null, 0.06);
+		FlxG.camera.follow(camFollow, null, 0.04 * (30 / FlxG.save.data.fpsCap));
 
 		var versionShit:FlxText = new FlxText(5, FlxG.height - 20, 0, "FNF " + gameVer, 20);
 		versionShit.scrollFactor.set();
@@ -191,13 +138,13 @@ class MainMenuState extends MusicBeatState
 
 		if (!selectedSomethin)
 		{
-			if (controls.UP_P)
+			if (controls.UP_P || FlxG.keys.justPressed.W)
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'));
 				changeItem(-1);
 			}
 
-			if (controls.DOWN_P)
+			if (controls.DOWN_P || FlxG.keys.justPressed.S)
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'));
 				changeItem(1);
@@ -208,11 +155,13 @@ class MainMenuState extends MusicBeatState
 				FlxG.switchState(new TitleState());
 			}
 
-			// reload textures
+			#if desktop
+			// preload textures. Desktop only
 			if (FlxG.keys.justPressed.SIX)
 			{
 				FlxG.switchState(new Caching());
 			}
+			#end
 
 			if (controls.ACCEPT)
 			{
@@ -253,14 +202,12 @@ class MainMenuState extends MusicBeatState
 								{
 									case 'story mode':
 										FlxG.switchState(new StoryMenuState());
-										trace("Story Menu Selected");
 									case 'freeplay':
 										FlxG.switchState(new FreeplayState());
-
-										trace("Freeplay Menu Selected");
-
 									case 'options':
 										FlxG.switchState(new OptionsMenu());
+									case 'credits':
+										FlxG.switchState(new CreditsMenuState());
 								}
 							});
 						}
@@ -273,14 +220,7 @@ class MainMenuState extends MusicBeatState
 
 		menuItems.forEach(function(spr:FlxSprite)
 		{
-			if (FlxG.save.data.menuskin)
-			{
-				//spr.screenCenter(X);
-			}
-			else
-			{
-				spr.screenCenter(X);
-			}
+			spr.screenCenter(X);
 		});
 	}
 

@@ -14,6 +14,7 @@ import lime.app.Application;
 #if desktop
 import Discord.DiscordClient;
 #end
+import flixel.addons.display.FlxBackdrop;
 
 using StringTools;
 
@@ -26,15 +27,29 @@ class FreeplayState extends MusicBeatState
 	var curDifficulty:Int = 1;
 	var vocals:FlxSound;
 
+	var scoreBG:FlxSprite;
 	var scoreText:FlxText;
 	var diffText:FlxText;
-	var lerpScore:Int = 0;
+	var lerpScore:Float = 0;
 	var intendedScore:Int = 0;
 
 	private var grpSongs:FlxTypedGroup<Alphabet>;
 	private var curPlaying:Bool = false;
 
 	private var iconArray:Array<HealthIcon> = [];
+
+	private var bgColors = [
+		0xFF9271FD, //tutorial
+		0xFF9271FD, //week1
+		0xFF223344, //week2
+		0xFF941653, //week3
+		0xFFFC96D7, //week4
+		0xFFA0D1FF, //week5
+		0xFFFF78BF, //week6
+		0xFFF6B604, //week7
+	];
+	
+	var bg:FlxSprite;
 
 	override function create()
 	{
@@ -63,37 +78,17 @@ class FreeplayState extends MusicBeatState
 		addWeek(['Bopeebo', 'Fresh', 'Dadbattle'], 1, ['dad']);
 		addWeek(['Spookeez', 'South', 'Monster'], 2, ['spooky', 'spooky', 'monster']);
 		addWeek(['Pico', 'Philly', 'Blammed'], 3, ['pico']);
-
 		addWeek(['Satin-Panties', 'High', 'Milf'], 4, ['mom']);
 		addWeek(['Cocoa', 'Eggnog', 'Winter-Horrorland'], 5, ['parents-christmas', 'parents-christmas', 'monster-christmas']);
-
 		addWeek(['Senpai', 'Roses', 'Thorns'], 6, ['senpai', 'senpai', 'spirit']);
+		addWeek(['Ugh', 'Guns', 'Stress'], 7, ['tankman']);
 
 		// LOAD MUSIC
 
 		// LOAD CHARACTERS
 
-		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuBGBlue'));
+		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		add(bg);
-
-		if (FlxG.save.data.menuskin)
-		{
-			var bgg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('flagsimages/fungridFreeplay'));
-			bgg.scrollFactor.set();
-			bgg.screenCenter();
-			bgg.velocity.set(15, 15);
-			bgg.antialiasing = true;
-			bgg.alpha = 0.15;
-			add(bgg);
-
-			var block:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('flagsimages/block'));
-			block.setGraphicSize(Std.int(block.width * 1.1));
-			block.updateHitbox();
-			block.screenCenter();
-			block.antialiasing = true;
-			block.scrollFactor.set();
-			add(block);
-		}
 
 		grpSongs = new FlxTypedGroup<Alphabet>();
 		add(grpSongs);
@@ -122,7 +117,8 @@ class FreeplayState extends MusicBeatState
 		scoreText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT);
 		// scoreText.alignment = RIGHT;
 
-		var scoreBG:FlxSprite = new FlxSprite(scoreText.x - 6, 0).makeGraphic(Std.int(FlxG.width * 0.35), 66, 0xFF000000);
+		scoreBG = new FlxSprite(scoreText.x - 6, 0).makeGraphic(1, 66, 0xFF000000);
+		scoreBG.antialiasing = false;
 		scoreBG.alpha = 0.6;
 		add(scoreBG);
 
@@ -207,14 +203,16 @@ class FreeplayState extends MusicBeatState
 		}
 
 		lerpScore = Math.floor(FlxMath.lerp(lerpScore, intendedScore, 0.4));
+		bg.color = FlxColor.interpolate(bg.color, bgColors[songs[curSelected].week % bgColors.length], CoolUtil.camLerp(0.045));
 
 		if (Math.abs(lerpScore - intendedScore) <= 10)
 			lerpScore = intendedScore;
 
 		scoreText.text = "PERSONAL BEST:" + lerpScore;
+		betterPosition();
 
-		var upP = controls.UP_P;
-		var downP = controls.DOWN_P;
+		var upP = FlxG.keys.justPressed.W || FlxG.keys.justPressed.UP;
+		var downP = FlxG.keys.justPressed.S || FlxG.keys.justPressed.DOWN;
 		var accepted = controls.ACCEPT;
 		var shift = FlxG.keys.justPressed.SHIFT;
 		var ctrl = FlxG.keys.justPressed.CONTROL;
@@ -241,9 +239,9 @@ class FreeplayState extends MusicBeatState
 			changeSelection(1);
 		}
 
-		if (controls.LEFT_P)
+		if (FlxG.keys.justPressed.A || FlxG.keys.justPressed.LEFT)
 			changeDiff(-1);
-		if (controls.RIGHT_P)
+		if (FlxG.keys.justPressed.D || FlxG.keys.justPressed.RIGHT)
 			changeDiff(1);
 
 		if (controls.BACK)
@@ -283,12 +281,13 @@ class FreeplayState extends MusicBeatState
 		switch (curDifficulty)
 		{
 			case 0:
-				diffText.text = "EASY";
+				diffText.text = "EASY >";
 			case 1:
-				diffText.text = 'NORMAL';
+				diffText.text = '< NORMAL >';
 			case 2:
-				diffText.text = "HARD";
+				diffText.text = "< HARD";
 		}
+		betterPosition();
 	}
 
 	function changeSelection(change:Int = 0)
@@ -340,11 +339,17 @@ class FreeplayState extends MusicBeatState
 			if (item.targetY == 0)
 			{
 				item.alpha = 1;
-				item.x += 60;
-				item.y += 10;
 				// item.setGraphicSize(Std.int(item.width));
 			}
 		}
+	}
+	function betterPosition()
+	{
+		scoreText.x = FlxG.width - scoreText.width - 6;
+		scoreBG.scale.x = FlxG.width - scoreText.x + 6;
+		scoreBG.x = FlxG.width - scoreBG.scale.x / 2;
+		diffText.x = scoreBG.x + scoreBG.width / 2;
+		diffText.x -= diffText.width / 2;
 	}
 }
 

@@ -20,6 +20,8 @@ class OverlaysMain extends TextField
 
 	public static var fpsCounter:FPS;
 
+	private var fontType:Int;
+
 	public function new(inX:Float = 10.0, inY:Float = 10.0, inCol:Int = 0x000000, ?font:String)
 	{
 		super();
@@ -27,7 +29,7 @@ class OverlaysMain extends TextField
 		x = inX;
 		y = inY;
 		selectable = false;
-		defaultTextFormat = new TextFormat(font != null ? font : 'VCR OSD Mono', (font == "VCR OSD Mono" ? 16 : 16), inCol);
+		defaultTextFormat = new TextFormat(font != null ? font : '_sans', (font == "_sans" ? 13 : 13), inCol);
 
 		fpsCounter = new FPS(10000, 10000, inCol);
 		fpsCounter.visible = false;
@@ -55,9 +57,11 @@ class OverlaysMain extends TextField
 						case 0:
 							fps_Function();
 						case 1:
-							memory_Function();	
+							memory_Function();
 						case 2:
-							version_Function();						
+							version_Function();
+						case 3:
+							resolution_Function();
 					}
 
 					text += "\n";
@@ -71,6 +75,11 @@ class OverlaysMain extends TextField
 	function fps_Function()
 	{
 		text += "FPS: " + currentFPS;
+	}
+
+	function resolution_Function()
+	{
+		text += "Resolution: " + FlxG.width + "x" + FlxG.height + "p " + Application.current.window.displayMode.refreshRate + "Hz";
 	}
 
 	function memory_Function()

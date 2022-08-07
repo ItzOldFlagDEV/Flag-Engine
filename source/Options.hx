@@ -1,10 +1,13 @@
 package;
 
+import openfl.text.FontType;
 import flixel.util.FlxColor;
 import Controls.KeyboardScheme;
 import flixel.FlxG;
 import openfl.display.FPS;
 import openfl.Lib;
+import flixel.FlxState;
+import flixel.FlxSubState;
 
 class OptionCatagory
 {
@@ -389,6 +392,28 @@ class MEMOption extends Option
 	}
 }
 
+class ResolutionOption extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+
+	public override function press():Bool
+	{
+		FlxG.save.data.resolutionOverlay = !FlxG.save.data.resolutionOverlay;
+		(cast(Lib.current.getChildAt(0), Main)).toggleResolution(FlxG.save.data.resolutionOverlay);
+		display = updateDisplay();
+		return true;
+	}
+
+	private override function updateDisplay():String
+	{
+		return "Resolution Display " + (!FlxG.save.data.resolutionOverlay ? "off" : "on");
+	}
+}
+
 class VEROption extends Option
 {
 	public function new(desc:String)
@@ -575,7 +600,7 @@ class Strums extends Option
 
 	private override function updateDisplay():String
 	{
-		return "Glow Opponent Strums " + (!FlxG.save.data.glowStrums ? "on" : "off");
+		return "Glow Opponent Strums " + (!FlxG.save.data.glowStrums ? "off" : "on");
 	}
 }
 
@@ -618,27 +643,6 @@ class NoteSkin extends Option
 	private override function updateDisplay():String
 	{
 		return "Note skin " + (!FlxG.save.data.noteskin ? "Arrows" : "Circles");
-	}
-}
-
-class MenuSkin extends Option
-{
-	public function new(desc:String)
-	{
-		super();
-		description = desc;
-	}
-
-	public override function press():Bool
-	{
-		FlxG.save.data.menuskin = !FlxG.save.data.menuskin;
-		display = updateDisplay();
-		return true;
-	}
-
-	private override function updateDisplay():String
-	{
-		return "Menu skin " + (!FlxG.save.data.menuskin ? "Default" : "Flags Skin");
 	}
 }
 
@@ -807,5 +811,65 @@ class SongResult extends Option
 	private override function updateDisplay():String
 	{
 		return FlxG.save.data.resultsong ? "Result screen On" : "Result screen Off";
+	}
+}
+
+class LaneBGOption extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+
+	public override function press():Bool
+	{
+		FlxG.switchState(new LaneBGOptionState());
+		return false;
+	}
+
+	private override function updateDisplay():String
+	{
+		return "Lane transparency";
+	}
+}
+
+class FpsCapOption extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+
+	public override function press():Bool
+	{
+		FlxG.switchState(new FpsCapOptionState());
+		return false;
+	}
+
+	private override function updateDisplay():String
+	{
+		return "Fps cap";
+	}
+}
+
+class ScrollSpeedOption extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+
+	public override function press():Bool
+	{
+		FlxG.switchState(new ScrollSpeedOptionState());
+		return false;
+	}
+
+	private override function updateDisplay():String
+	{
+		return "Scroll speed";
 	}
 }

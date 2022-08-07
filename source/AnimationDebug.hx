@@ -8,8 +8,20 @@ import flixel.addons.display.FlxGridOverlay;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import openfl.net.FileReference;
-import flixel.ui.FlxButton;
 import flixel.util.FlxColor;
+import flixel.addons.ui.FlxInputText;
+import flixel.addons.ui.FlxUI9SliceSprite;
+import flixel.addons.ui.FlxUI;
+import flixel.addons.ui.FlxUICheckBox;
+import flixel.addons.ui.FlxUIDropDownMenu;
+import flixel.addons.ui.FlxUIInputText;
+import flixel.addons.ui.FlxUINumericStepper;
+import flixel.addons.ui.FlxUITabMenu;
+import flixel.addons.ui.FlxUITooltip.FlxUITooltipStyle;
+import flixel.addons.ui.FlxUIText;
+import flixel.ui.FlxButton;
+import flixel.ui.FlxSpriteButton;
+
 /**
 	*DEBUG MODE
  */
@@ -27,7 +39,9 @@ class AnimationDebug extends FlxState
 	var camFollow:FlxObject;
 	var bg:FlxSprite;
 	var grid:FlxSprite;
-	
+
+	var UI_box:FlxUITabMenu;
+
 	public function new(daAnim:String = 'spooky')
 	{
 		super();
@@ -36,6 +50,7 @@ class AnimationDebug extends FlxState
 
 	override function create()
 	{
+		FlxG.mouse.visible = true;
 
 		FlxG.sound.music.stop();
 		FlxG.sound.playMusic(Paths.music('Haggstrom'));
@@ -52,7 +67,6 @@ class AnimationDebug extends FlxState
 			dad = new Character(0, 0, daAnim);
 			dad.screenCenter();
 			dad.debugMode = true;
-			
 
 			char = dad;
 			dad.flipX = false;
@@ -62,7 +76,6 @@ class AnimationDebug extends FlxState
 			bf = new Boyfriend(0, 0);
 			bf.screenCenter();
 			bf.debugMode = true;
-			
 
 			char = bf;
 			bf.flipX = false;
@@ -76,7 +89,7 @@ class AnimationDebug extends FlxState
 		var devtext2:FlxText = new FlxText(5, FlxG.height - 40, 0, "Press M to mute song, N to unmute song", 20);
 		devtext2.scrollFactor.set();
 		devtext2.setFormat("VCR OSD Mono", 20, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		
+
 		var devtext3:FlxText = new FlxText(5, FlxG.height - 60, 0, "AS switching animations", 20);
 		devtext3.scrollFactor.set();
 		devtext3.setFormat("VCR OSD Mono", 20, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
@@ -104,14 +117,20 @@ class AnimationDebug extends FlxState
 		bg.visible = true;
 		bg.antialiasing = true;
 
-		//grid = new FlxSprite(-80).loadGraphic(Paths.image('debugGrid'));
-		//grid.setGraphicSize(Std.int(grid.width * 1.1));
-		//grid.updateHitbox();
-		//grid.screenCenter();
-		//grid.alpha = 1;
-		//grid.visible = true;
-		//grid.antialiasing = true;
-		
+		var tabs = [{name: "Character", label: 'Character'}, {name: "Options", label: 'Options'}];
+		UI_box = new FlxUITabMenu(null, tabs, true);
+		UI_box.resize(250, 350);
+		UI_box.x = 1000;
+		UI_box.y = 20;
+
+		// grid = new FlxSprite(-80).loadGraphic(Paths.image('debugGrid'));
+		// grid.setGraphicSize(Std.int(grid.width * 1.1));
+		// grid.updateHitbox();
+		// grid.screenCenter();
+		// grid.alpha = 1;
+		// grid.visible = true;
+		// grid.antialiasing = true;
+
 		add(bg);
 		add(devtext1);
 		add(devtext2);
@@ -129,7 +148,14 @@ class AnimationDebug extends FlxState
 		textAnim.scrollFactor.set();
 		add(textAnim);
 		add(dad);
-		//add(grid);
+		// add(UI_box);
+		// add(grid);
+
+		function addCharacterUI():Void
+		{
+			var tab_group_character = new FlxUI(null, UI_box);
+			tab_group_character.name = "Character";
+		}
 
 		genBoyOffsets();
 
@@ -236,22 +262,21 @@ class AnimationDebug extends FlxState
 		if (holdShift)
 			multiplier = 10;
 
-		if(menubind)
+		if (menubind)
 		{
 			FlxG.sound.music.stop();
 			FlxG.switchState(new MainMenuState());
 		}
 
-		if(mute)
+		if (mute)
 		{
 			FlxG.sound.music.stop();
 		}
 
-		if(unmute)
+		if (unmute)
 		{
 			FlxG.sound.playMusic(Paths.music('Haggstrom'));
 		}
-	
 
 		if (upP || rightP || downP || leftP)
 		{
@@ -270,7 +295,6 @@ class AnimationDebug extends FlxState
 			char.playAnim(animList[curAnim]);
 		}
 
-		super.update(elapsed);			
+		super.update(elapsed);
 	}
 }
-	

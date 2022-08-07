@@ -17,12 +17,13 @@ class PauseSubState extends MusicBeatSubstate
 {
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
-	var menuItems:Array<String> = ['Resume', 'Restart Song', 'Exit to menu'];
+	var menuItems:Array<String> = ['Resume', 'Restart Song', 'Change Difficulty', 'Exit to menu'];
+	var menuItemsUpdate:Array<String> = ['Resume', 'Restart Song', 'Change Difficulty', 'Exit to menu'];
+	var difficultyChoices:Array<String> = ["Easy", "Normal", "Hard", "Back"];
 
 	var curSelected:Int = 0;
 
 	var pauseMusic:FlxSound;
-
 
 	public function new(x:Float, y:Float)
 	{
@@ -66,7 +67,7 @@ class PauseSubState extends MusicBeatSubstate
 
 		levelInfo.x = FlxG.width - (levelInfo.width + 20);
 		levelDifficulty.x = FlxG.width - (levelDifficulty.width + 10);
-		blueballedTxt.x = FlxG.width - (blueballedTxt.width + 10);
+		blueballedTxt.x = FlxG.width - (blueballedTxt.width + 20);
 
 		FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
 		FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
@@ -95,8 +96,8 @@ class PauseSubState extends MusicBeatSubstate
 
 		super.update(elapsed);
 
-		var upP = controls.UP_P;
-		var downP = controls.DOWN_P;
+		var upP = FlxG.keys.justPressed.W || FlxG.keys.justPressed.UP;
+		var downP = FlxG.keys.justPressed.S || FlxG.keys.justPressed.DOWN;
 		var accepted = controls.ACCEPT;
 
 		if (upP)
@@ -118,9 +119,41 @@ class PauseSubState extends MusicBeatSubstate
 					close();
 				case "Restart Song":
 					FlxG.resetState();
+				// Week 7 stuff
+				case "Change Difficulty":
+					menuItems = difficultyChoices;
+					updateMenu();
+				case "Easy":
+					PlayState.SONG = Song.loadFromJson(PlayState.SONG.song.toLowerCase() + "-easy", PlayState.SONG.song.toLowerCase());
+					PlayState.storyDifficulty = 0;
+
+					FlxG.switchState(new PlayState());
+
+				case "Normal":
+					PlayState.SONG = Song.loadFromJson(PlayState.SONG.song.toLowerCase(), PlayState.SONG.song.toLowerCase());
+					PlayState.storyDifficulty = 1;
+
+					FlxG.switchState(new PlayState());
+
+				case "Hard":
+					PlayState.SONG = Song.loadFromJson(PlayState.SONG.song.toLowerCase() + "-hard", PlayState.SONG.song.toLowerCase());
+					PlayState.storyDifficulty = 2;
+
+					FlxG.switchState(new PlayState());
+				case "Back":
+					menuItems = menuItemsUpdate;
+					updateMenu();
+
 				case "Exit to menu":
 					PlayState.loadRep = false;
-					FlxG.switchState(new MainMenuState());
+					if (PlayState.isStoryMode)
+					{
+						FlxG.switchState(new StoryMenuState());
+					}
+					else
+					{
+						FlxG.switchState(new FreeplayState());
+					}
 			}
 		}
 
@@ -129,6 +162,22 @@ class PauseSubState extends MusicBeatSubstate
 			// for reference later!
 			// PlayerSettings.player1.controls.replaceBinding(Control.LEFT, Keys, FlxKey.J, null);
 		}
+	}
+
+	function updateMenu()
+	{
+		grpMenuShit.clear();
+
+		for (a in 0...menuItems.length)
+		{
+			var songText:Alphabet = new Alphabet(0, (70 * a) + 30, menuItems[a], true, false);
+			songText.isMenuItem = true;
+			songText.targetY = a;
+			grpMenuShit.add(songText);
+		}
+
+		curSelected = 0;
+		changeSelection();
 	}
 
 	override function destroy()

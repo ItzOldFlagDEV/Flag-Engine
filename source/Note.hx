@@ -62,26 +62,40 @@ class Note extends FlxSprite
 
 		var daStage:String = PlayState.curStage;
 
-		switch (daStage)
+		var noteTypeCheck:String = 'normal';
+
+		if (PlayState.SONG.noteStyle == null)
 		{
-			case 'school' | 'schoolEvil':
-			
-			if (FlxG.save.data.noteskin)
+			switch (PlayState.storyWeek)
 			{
-				loadGraphic(Paths.image('Circles/Circles-pixel', 'shared'), true, 17, 17);
-				if (isSustainNote)
-				{
-					loadGraphic(Paths.image('weeb/pixelUI/arrowEnds'), true, 7, 6);
-				}
+				case 6:
+					noteTypeCheck = 'pixel';
 			}
-			else
-			{
-				loadGraphic(Paths.image('weeb/pixelUI/arrows-pixels'), true, 17, 17);
-				if (isSustainNote)
+		}
+		else
+		{
+			noteTypeCheck = PlayState.SONG.noteStyle;
+		}
+
+		switch (noteTypeCheck)
+		{
+			case 'pixel':
+				if (FlxG.save.data.noteskin)
 				{
-					loadGraphic(Paths.image('weeb/pixelUI/arrowEnds'), true, 7, 6);
+					loadGraphic(Paths.image('Circles/Circles-pixel', 'shared'), true, 17, 17);
+					if (isSustainNote)
+					{
+						loadGraphic(Paths.image('weeb/pixelUI/arrowEnds'), true, 7, 6);
+					}
 				}
-			}
+				else
+				{
+					loadGraphic(Paths.image('weeb/pixelUI/arrows-pixels'), true, 17, 17);
+					if (isSustainNote)
+					{
+						loadGraphic(Paths.image('weeb/pixelUI/arrowEnds'), true, 7, 6);
+					}
+				}
 
 				for (i in 0...4)
 				{
@@ -93,14 +107,35 @@ class Note extends FlxSprite
 				setGraphicSize(Std.int(width * PlayState.daPixelZoom));
 				updateHitbox();
 
-			default:
+			case 'normal':
 				if (FlxG.save.data.noteskin)
 				{
-				frames = Paths.getSparrowAtlas('Circles/Circles', 'shared');
+					frames = Paths.getSparrowAtlas('Circles/Circles', 'shared');
 				}
 				else
 				{
-				frames = Paths.getSparrowAtlas('NOTE_assets');
+					frames = Paths.getSparrowAtlas('NOTE_assets');
+				}
+
+				for (i in 0...4)
+				{
+					animation.addByPrefix(dataColor[i] + 'Scroll', dataColor[i] + '0'); // Normal notes
+					animation.addByPrefix(dataColor[i] + 'hold', dataColor[i] + ' hold piece'); // Hold
+					animation.addByPrefix(dataColor[i] + 'holdend', dataColor[i] + ' hold end'); // Tails
+				}
+
+				setGraphicSize(Std.int(width * 0.7));
+				updateHitbox();
+				antialiasing = true;
+
+			default:
+				if (FlxG.save.data.noteskin)
+				{
+					frames = Paths.getSparrowAtlas('Circles/Circles', 'shared');
+				}
+				else
+				{
+					frames = Paths.getSparrowAtlas('NOTE_assets');
 				}
 
 				for (i in 0...4)

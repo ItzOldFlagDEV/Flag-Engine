@@ -5,15 +5,17 @@ Flag Engine:
     -Fixed input
     -It is better and more convenient to create mods
     -Discord Rich Presence
+    -Week 7
 
 Flag Engine has a lot of settings:
 
 Gameplay settings:
 
-    -DFJK QWOP ZXNM or WASD IJKL binds option
+    -Custom key binds
     -Ghost tapping
     -Down scroll or Up Scroll
     -Middle scroll
+    -custom Scroll Speed
     -Toggle reset keybind
     -Instant respawn
 
@@ -43,6 +45,8 @@ Other settings:
     -Note Splashes
     -Flag Engine Weathermark
     -Replays(From Kade Engine)
+    -Lane BG
+    -Custom FPS cap
     -Toggle GUI
     -Toggle Glow opponent sturms
     -Hitsounds
@@ -63,7 +67,6 @@ Gameplay Modifers settings:
 Skins:
 
     -Switch notes skin (Arrows or Circles)
-    -Switch game skin Original to Flag (beta)
 
 Flag Engine by OldFlag
 
@@ -79,5 +82,3 @@ Original:
  Flag Engine:
 - [OldFlag](https://www.youtube.com/channel/UCSoMQrybz6_rhQgtmHO2IFQ) - Main programming. [GitHub](https://github.com/ItzOldFlagDEV).
 - [FunkyPikmin](https://www.youtube.com/channel/UCJAEffFHkDM1g8Nrvea0FYg) - Programming. [GitHub](https://github.com/FunkyPikmin).
-
-1.2 soon...........

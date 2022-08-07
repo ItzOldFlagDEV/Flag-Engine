@@ -26,6 +26,7 @@ class OptionsMenu extends MusicBeatState
 			new TappingOption("Whether pressing a key when no notes are there counts as a miss."),
 			new DownscrollOption("Change the layout of the strumline."),
 			new MiddleScrollOption("If enabled, BF's notes are centred, with the opponents invisible."),
+			new ScrollSpeedOption("Custom scroll speed"),
 			new ResetOption("Toggle pressing R to die in game."),
 			new RespawnOption("Skips the death screen when you die.")
 		]),
@@ -39,10 +40,13 @@ class OptionsMenu extends MusicBeatState
 		new OptionCatagory("Overlays", [
 			new FPSOption("Toggle the FPS Counter."),
 			new MEMOption("Toggle the Memory Counter."),
-			new VEROption("Toggle the Version text.")
+			new VEROption("Toggle the Version text."),
+			new ResolutionOption("Toogle the Resolution display")
 		]),
 		new OptionCatagory("Other", [
 			new NotesSplashOption("Add note splashes."),
+			new LaneBGOption("Custom lane transparency"),
+			new FpsCapOption("Custom FPS cap"),
 			new FlagmarkOption("Add flag engine watermark."),
 			new ReplayOption("View replays."),
 			new ToogleGUI("Toggle GUI."),
@@ -61,7 +65,9 @@ class OptionsMenu extends MusicBeatState
 			new PFCMod("If you get below 100% accuracy, you will die"),
 			new CheatOption("Toggles the ability to cheat without consequences. You know you want to.")
 		]),
-		new OptionCatagory("Skins", [new NoteSkin("Changes note skin"), new MenuSkin("Changes menu skin")])
+		new OptionCatagory("Skins", [
+			new NoteSkin("Changes note skin")
+		])
 	];
 
 	private var currentDescription:String = "";
@@ -137,10 +143,11 @@ class OptionsMenu extends MusicBeatState
 			}
 			curSelected = 0;
 		}
-		if (controls.UP_P)
-			changeSelection(-1);
-		if (controls.DOWN_P)
+		if (controls.DOWN_P || FlxG.keys.justPressed.S)
 			changeSelection(1);
+
+		if (controls.UP_P || FlxG.keys.justPressed.W)
+			changeSelection(-1);
 
 		if (isCat)
 		{

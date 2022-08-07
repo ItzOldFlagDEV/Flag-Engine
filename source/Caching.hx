@@ -1,3 +1,4 @@
+#if desktop
 package;
 
 import haxe.Exception;
@@ -131,3 +132,4 @@ class Caching extends MusicBeatState
 
     }
 }
+#end

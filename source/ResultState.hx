@@ -1,13 +1,16 @@
 package;
 
-import Controls.Control;
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.FlxSubState;
+import flixel.addons.transition.FlxTransitionableState;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.text.FlxText;
-import flixel.util.FlxColor;
 import flixel.input.keyboard.FlxKey;
 import flixel.system.FlxSound;
+import flixel.text.FlxText;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import flixel.util.FlxColor;
 
 class ResultState extends MusicBeatSubstate
 {
@@ -19,13 +22,12 @@ class ResultState extends MusicBeatSubstate
 		return num;
 	}
 
-	override function create()
+	public function new(x:Float, y:Float)
 	{
-		var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuBG'));
-		bg.setGraphicSize(Std.int(bg.width * 1.1));
-		bg.updateHitbox();
-		bg.screenCenter();
-		bg.antialiasing = true;
+		super();
+
+		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+		bg.alpha = 0.6;
 		bg.scrollFactor.set();
 		add(bg);
 
@@ -52,6 +54,8 @@ class ResultState extends MusicBeatSubstate
 		ratingsInfo.borderSize = 4;
 		ratingsInfo.borderQuality = 4;
 		add(ratingsInfo);
+
+		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 	}
 
 	override function update(elapsed:Float)
