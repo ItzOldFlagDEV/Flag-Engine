@@ -77,4 +77,4 @@ Original:
 
  Flag Engine:
 - [OldFlag](https://github.com/ItzOldFlagDEV) - Main Programmer/Creator.
-- [FunkyPikmin]https://github.com/FunkyPikmin) - Porgrammer.
+- [FunkyPikmin](https://github.com/FunkyPikmin) - Programmer.
