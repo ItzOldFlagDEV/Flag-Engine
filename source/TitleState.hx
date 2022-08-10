@@ -250,7 +250,7 @@ class TitleState extends MusicBeatState
 
 	function getIntroTextShit():Array<Array<String>>
 	{
-		var fullText:String = Assets.getText(Paths.txt('introText'));
+		var fullText:String = Assets.getText(Paths.txt('introText')); // totally unused
 
 		var firstArray:Array<String> = fullText.split('\n');
 		var swagGoodArray:Array<Array<String>> = [];
@@ -381,6 +381,9 @@ class TitleState extends MusicBeatState
 		switch (curBeat)
 		{
 			case 1:
+				//FlxG.sound.music.stop(); //DONT EDIT THIS
+				//FlxG.sound.playMusic(Paths.music('freakyMenu'), 0); //ANOTHER SOLUTION
+				//FlxG.sound.music.fadeIn(4, 0, 0.7); //IF THE SOUND DOESN'T PLAY //ALSO REMOVE BOTH //FlxG.sound AND CHANGE TO FlxG.sound IF MUSIC NOT WORKING PROPERLY
 				createCoolText(['ninjamuffin99', 'phantomArcade', 'kawaisprite', 'evilsk8er']);
 			// credTextShit.visible = true;
 			case 3:
@@ -393,9 +396,9 @@ class TitleState extends MusicBeatState
 			// credTextShit.text = 'In association \nwith';
 			// credTextShit.screenCenter();
 			case 5:
-				createCoolText(['Flag Engine creator is...']);
+				createCoolText(['Flag Engine by']);
 			case 7:
-				addMoreText('OldFlag ');
+				addMoreText('OldFlag');
 			// credTextShit.text += '\nNewgrounds';
 			case 8:
 				deleteCoolText();
@@ -415,15 +418,18 @@ class TitleState extends MusicBeatState
 			// credTextShit.text = "Friday";
 			// credTextShit.screenCenter();
 			case 13:
-				addMoreText('Friday');
+				addMoreText('FNF');
 			// credTextShit.visible = true;
 			case 14:
-				addMoreText('Night');
+				addMoreText('Flag');
 			// credTextShit.text += '\nNight';
 			case 15:
-				addMoreText('Funkin'); // credTextShit.text += '\nFunkin';
-
-			case 16:
+				addMoreText('Engine'); // credTextShit.text += '\nFunkin';
+			//case 16:
+				//addMoreText('Is cool'); //ADD IF THE SONG DOESN'T START LIKE NORMAL
+			//case 17:
+				//skipIntro();
+			case 16
 				skipIntro();
 		}
 	}
