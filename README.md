@@ -68,10 +68,6 @@ Skins:
 
     -Switch notes skin (Arrows or Circles)
 
-Flag Engine by OldFlag
-
-Thanks for help:FunkyPikmin https://www.youtube.com/channel/UCJAEffFHkDM1g8Nrvea0FYg
-
 Credits:
 
 Original:
@@ -80,5 +76,5 @@ Original:
  - [Kawai Sprite](https://twitter.com/kawaisprite) - Music
 
  Flag Engine:
-- [OldFlag](https://www.youtube.com/channel/UCSoMQrybz6_rhQgtmHO2IFQ) - Main programming. [GitHub](https://github.com/ItzOldFlagDEV).
-- [FunkyPikmin](https://www.youtube.com/channel/UCJAEffFHkDM1g8Nrvea0FYg) - Programming. [GitHub](https://github.com/FunkyPikmin).
+- [OldFlag](https://github.com/ItzOldFlagDEV) - Main Programmer/Creator.
+- [FunkyPikmin](https://github.com/FunkyPikmin) - Programmer.
